@@ -1,0 +1,116 @@
+package com.jvrcoding.qrcraft.qr_scanner
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.dp
+import com.jvrcoding.qrcraft.ui.theme.Overlay
+
+@Composable
+fun QRScannerOverlay() {
+    val cornerPaintColor = MaterialTheme.colorScheme.primary
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val boxSize = size.minDimension * 0.8f
+        val boxTopLeftGlobal = Offset((size.width - boxSize) / 2, (size.height - boxSize) / 2)
+        val boxRect = Rect(boxTopLeftGlobal, Size(boxSize, boxSize))
+
+        // Screen background
+        drawRect(color = Overlay)
+
+        // Rounded transparent cutout
+        val cornerRadiusPx = 24.dp.toPx()
+        drawRoundRect(
+            color = Color.Transparent,
+            topLeft = boxRect.topLeft,
+            size = boxRect.size,
+            cornerRadius = CornerRadius(cornerRadiusPx, cornerRadiusPx),
+            blendMode = BlendMode.Clear
+        )
+
+        val strokeWidthPx = 4.dp.toPx()
+        val armLengthPx = 40.dp.toPx()
+
+        val arcDrawSize = Size(cornerRadiusPx * 2, cornerRadiusPx * 2)
+        val arcDrawStroke = Stroke(width = strokeWidthPx)
+
+        fun drawCornerIndicator(
+            arcTopLeftCoord: Offset,
+            arcStartAngleDegrees: Float,
+            horizontalLineStartCoord: Offset,
+            horizontalLineEndCoord: Offset,
+            verticalLineStartCoord: Offset,
+            verticalLineEndCoord: Offset
+        ) {
+            drawArc(
+                color = cornerPaintColor,
+                startAngle = arcStartAngleDegrees,
+                sweepAngle = 90f,
+                useCenter = false,
+                topLeft = arcTopLeftCoord,
+                size = arcDrawSize,
+                style = arcDrawStroke
+            )
+            drawLine(
+                color = cornerPaintColor,
+                start = horizontalLineStartCoord,
+                end = horizontalLineEndCoord,
+                strokeWidth = strokeWidthPx
+            )
+            drawLine(
+                color = cornerPaintColor,
+                start = verticalLineStartCoord,
+                end = verticalLineEndCoord,
+                strokeWidth = strokeWidthPx
+            )
+        }
+
+        // Top-left corner
+        drawCornerIndicator(
+            arcTopLeftCoord = boxRect.topLeft,
+            arcStartAngleDegrees = 180f,
+            horizontalLineStartCoord = boxRect.topLeft + Offset(cornerRadiusPx, 0f),
+            horizontalLineEndCoord = boxRect.topLeft + Offset(armLengthPx, 0f),
+            verticalLineStartCoord = boxRect.topLeft + Offset(0f, cornerRadiusPx),
+            verticalLineEndCoord = boxRect.topLeft + Offset(0f, armLengthPx)
+        )
+
+        // Top-right corner
+        drawCornerIndicator(
+            arcTopLeftCoord = Offset(boxRect.topRight.x - cornerRadiusPx * 2, boxRect.topRight.y),
+            arcStartAngleDegrees = 270f,
+            horizontalLineStartCoord = boxRect.topRight - Offset(cornerRadiusPx, 0f),
+            horizontalLineEndCoord = boxRect.topRight - Offset(armLengthPx, 0f),
+            verticalLineStartCoord = boxRect.topRight + Offset(0f, cornerRadiusPx),
+            verticalLineEndCoord = boxRect.topRight + Offset(0f, armLengthPx)
+        )
+
+        // Bottom-left corner
+        drawCornerIndicator(
+            arcTopLeftCoord = Offset(boxRect.bottomLeft.x, boxRect.bottomLeft.y - cornerRadiusPx * 2),
+            arcStartAngleDegrees = 90f,
+            horizontalLineStartCoord = boxRect.bottomLeft + Offset(cornerRadiusPx, 0f),
+            horizontalLineEndCoord = boxRect.bottomLeft + Offset(armLengthPx, 0f),
+            verticalLineStartCoord = boxRect.bottomLeft - Offset(0f, cornerRadiusPx),
+            verticalLineEndCoord = boxRect.bottomLeft - Offset(0f, armLengthPx)
+        )
+
+        // Bottom-right corner
+        drawCornerIndicator(
+            arcTopLeftCoord = Offset(boxRect.bottomRight.x - cornerRadiusPx * 2, boxRect.bottomRight.y - cornerRadiusPx * 2),
+            arcStartAngleDegrees = 0f,
+            horizontalLineStartCoord = boxRect.bottomRight - Offset(cornerRadiusPx, 0f),
+            horizontalLineEndCoord = boxRect.bottomRight - Offset(armLengthPx, 0f),
+            verticalLineStartCoord = boxRect.bottomRight - Offset(0f, cornerRadiusPx),
+            verticalLineEndCoord = boxRect.bottomRight - Offset(0f, armLengthPx)
+        )
+    }
+}

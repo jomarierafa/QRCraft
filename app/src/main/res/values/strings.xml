@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">QR Craft</string>
+    <string name="grant_access">Grant Access</string>
+    <string name="close_app">Close App</string>
+</resources>
