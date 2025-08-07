@@ -5,4 +5,5 @@ sealed interface QRScannerAction {
         val acceptedCameraPermission: Boolean,
         val showCameraRationale: Boolean
     ): QRScannerAction
+    data object DismissRationaleDialog: QRScannerAction
 }

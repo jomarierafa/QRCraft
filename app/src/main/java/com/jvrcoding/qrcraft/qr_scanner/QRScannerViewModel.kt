@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class QRScannerViewModel(
 ): ViewModel() {
@@ -17,7 +16,14 @@ class QRScannerViewModel(
         when(action) {
             is QRScannerAction.SubmitCameraPermissionInfo -> {
                 state = state.copy(
+                    hasCameraPermission = action.acceptedCameraPermission,
                     showCameraRationale = action.showCameraRationale
+                )
+            }
+
+            QRScannerAction.DismissRationaleDialog -> {
+                state = state.copy(
+                    showCameraRationale = false
                 )
             }
         }
