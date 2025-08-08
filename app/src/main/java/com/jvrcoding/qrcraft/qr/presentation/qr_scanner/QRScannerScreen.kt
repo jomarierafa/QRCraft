@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr_scanner
+package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
 import android.Manifest
 import android.content.Context
@@ -48,16 +48,19 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.designsystem.components.QRCraftDialog
-import com.jvrcoding.qrcraft.core.designsystem.components.QRCraftSnackBar
-import com.jvrcoding.qrcraft.qr_scanner.util.hasCameraPermission
-import com.jvrcoding.qrcraft.qr_scanner.util.shouldShowCameraPermissionRationale
+import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftDialog
+import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftSnackBar
+import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
+import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
+import com.jvrcoding.qrcraft.qr.presentation.util.shouldShowCameraPermissionRationale
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import kotlin.math.min
 
 
 @Composable
 fun QRSCannerScreenRoot(
+    onNavigateToScanResult: () -> Unit,
     viewModel: QRScannerViewModel = koinViewModel(),
 ){
     QRScannerScreen(
@@ -176,7 +179,7 @@ fun QRScannerScreen(
                                     }
 
                                     val boxSizeRatio = 0.5f
-                                    val minDim = if (uprightImageWidth > 0 && uprightImageHeight > 0) kotlin.math.min(uprightImageWidth, uprightImageHeight) else 0
+                                    val minDim = if (uprightImageWidth > 0 && uprightImageHeight > 0) min(uprightImageWidth, uprightImageHeight) else 0
                                     val scanBoxSize = minDim * boxSizeRatio
 
                                     val scanBoxLeft = (uprightImageWidth - scanBoxSize) / 2f

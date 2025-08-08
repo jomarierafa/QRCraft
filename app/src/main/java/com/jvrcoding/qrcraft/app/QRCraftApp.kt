@@ -1,7 +1,7 @@
-package com.jvrcoding.qrcraft
+package com.jvrcoding.qrcraft.app
 
 import android.app.Application
-import com.jvrcoding.qrcraft.di.appModule
+import com.jvrcoding.qrcraft.app.di.appModule
 import org.koin.core.context.startKoin
 
 class QRCraftApp: Application()  {

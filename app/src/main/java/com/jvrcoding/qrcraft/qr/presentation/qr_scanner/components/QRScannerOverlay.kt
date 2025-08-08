@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr_scanner
+package com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints

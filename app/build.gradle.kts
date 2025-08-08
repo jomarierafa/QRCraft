@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -58,11 +59,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.core.splashscreen)
+
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
+    // scanner
     implementation(libs.google.mlkit.barcode.scanning)
 
     implementation(libs.bundles.cameraX)
     implementation(libs.bundles.koin)
 //    implementation(libs.accompanist.permissions)
+
 
 
 }

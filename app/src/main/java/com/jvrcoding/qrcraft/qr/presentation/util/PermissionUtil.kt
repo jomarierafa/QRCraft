@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr_scanner.util
+package com.jvrcoding.qrcraft.qr.presentation.util
 
 import android.Manifest
 import android.content.Context

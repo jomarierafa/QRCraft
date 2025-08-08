@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr_scanner
+package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
 data class QRScannerState(
     val hasCameraPermission: Boolean = false,

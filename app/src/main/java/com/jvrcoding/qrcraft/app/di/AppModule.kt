@@ -1,6 +1,6 @@
-package com.jvrcoding.qrcraft.di
+package com.jvrcoding.qrcraft.app.di
 
-import com.jvrcoding.qrcraft.qr_scanner.QRScannerViewModel
+import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

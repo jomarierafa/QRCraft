@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.core.designsystem.components
+package com.jvrcoding.qrcraft.core.presentation.designsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
