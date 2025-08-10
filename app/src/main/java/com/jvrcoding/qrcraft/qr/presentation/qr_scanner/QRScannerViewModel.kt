@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerEvent.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -37,14 +39,20 @@ class QRScannerViewModel(
 
             is QRScannerAction.OnSuccessfulScan -> {
                 state = state.copy(
-                    isScanning = true
+                    isQRProcessing = true
                 )
                 viewModelScope.launch {
+                    delay(500)
                     eventChannel.send(
-                        QRScannerEvent.ScanResult(
-                            action.barcode.valueType,
-                            parseQr(action.barcode)
+                        ScanResult(
+                            type = action.barcode.valueType,
+                            qrValue = parseQr(action.barcode)
                         )
+                    )
+
+                    delay(500)
+                    state = state.copy(
+                        isQRProcessing = false
                     )
                 }
             }

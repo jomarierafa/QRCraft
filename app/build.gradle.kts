@@ -66,6 +66,7 @@ dependencies {
 
     // scanner
     implementation(libs.google.mlkit.barcode.scanning)
+    implementation(libs.google.zxing)
 
     implementation(libs.bundles.cameraX)
     implementation(libs.bundles.koin)

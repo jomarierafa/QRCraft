@@ -14,7 +14,8 @@ cameraX = "1.4.2"
 googleMlKit = "17.3.0"
 koin = "4.1.0"
 navigationCompose = "2.9.3"
-kotlinSerialization = "1.8.1"
+kotlinSerialization = "1.9.0"
+zXing = "3.5.3"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -42,6 +43,7 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+google-zxing = { group = "com.google.zxing", name = "core", version.ref = "zXing" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

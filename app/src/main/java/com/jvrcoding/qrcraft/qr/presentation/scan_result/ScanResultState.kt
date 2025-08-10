@@ -5,7 +5,7 @@ import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
 
 data class ScanResultState(
-    val qrBitmap: Bitmap? = null,
+    val qrImage: Bitmap? = null,
     val contentType: UiText = UiText.StringResource(R.string.text),
     val contentValue: String = ""
 )

@@ -9,6 +9,6 @@ sealed interface QRScannerAction {
     ): QRScannerAction
     data object DismissRationaleDialog: QRScannerAction
     data class OnSuccessfulScan(
-        val barcode: Barcode,
+        val barcode: Barcode
     ): QRScannerAction
 }

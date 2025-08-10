@@ -2,20 +2,13 @@ package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Rect
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -41,28 +35,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftDialog
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftSnackBar
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
+import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.CameraPreview
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
 import com.jvrcoding.qrcraft.qr.presentation.util.shouldShowCameraPermissionRationale
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import kotlin.math.min
 
 
 @Composable
 fun QRSCannerScreenRoot(
-    onNavigateToScanResult: (String) -> Unit,
+    onNavigateToScanResult: (String, Int) -> Unit,
     viewModel: QRScannerViewModel = koinViewModel(),
 ){
 
@@ -78,7 +65,10 @@ fun QRSCannerScreenRoot(
             }
 
             is QRScannerEvent.ScanResult -> {
-                onNavigateToScanResult(event.qrValue)
+                onNavigateToScanResult(
+                    event.qrValue,
+                    event.type
+                )
             }
         }
     }
@@ -97,7 +87,6 @@ fun QRScannerScreen(
     state: QRScannerState,
     onAction: (QRScannerAction) -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -158,104 +147,13 @@ fun QRScannerScreen(
     ) { _ ->
         Box(modifier = Modifier.fillMaxSize()) {
             if (state.hasCameraPermission) {
-                AndroidView(
-                    factory = { context ->
-                        val previewView = PreviewView(context)
-                        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-
-                        cameraProviderFuture.addListener({
-                            val cameraProvider = cameraProviderFuture.get()
-
-                            val preview = Preview.Builder().build().also {
-                                it.surfaceProvider = previewView.surfaceProvider
-                            }
-
-                            val imageAnalysis = ImageAnalysis.Builder()
-                                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                                .build()
-
-                            val scanner = BarcodeScanning.getClient(
-                                BarcodeScannerOptions.Builder()
-                                    .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-                                    .build()
-                            )
-
-                            imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
-                                val mediaImage = imageProxy.image
-                                if (mediaImage != null /*&& !state.isScanning*/) {
-                                    // Calculate the scan zone based on the image dimensions
-                                    val imageWidth = imageProxy.width
-                                    val imageHeight = imageProxy.height
-                                    val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-
-                                    val uprightImageWidth: Int
-                                    val uprightImageHeight: Int
-                                    if (rotationDegrees == 90 || rotationDegrees == 270) {
-                                        uprightImageWidth = imageHeight // Image is rotated, swap dimensions
-                                        uprightImageHeight = imageWidth
-                                    } else {
-                                        uprightImageWidth = imageWidth
-                                        uprightImageHeight = imageHeight
-                                    }
-
-                                    val boxSizeRatio = 0.5f
-                                    val minDim = if (uprightImageWidth > 0 && uprightImageHeight > 0) min(uprightImageWidth, uprightImageHeight) else 0
-                                    val scanBoxSize = minDim * boxSizeRatio
-
-                                    val scanBoxLeft = (uprightImageWidth - scanBoxSize) / 2f
-                                    val scanBoxTop = (uprightImageHeight - scanBoxSize) / 2f
-                                    val scanBoxRight = scanBoxLeft + scanBoxSize
-                                    val scanBoxBottom = scanBoxTop + scanBoxSize
-
-                                    // This Rect is in the image's coordinate system (after rotation is handled by InputImage)
-                                    val scanZoneInImageCoordinates = Rect(
-                                        scanBoxLeft.toInt().coerceAtLeast(0),
-                                        scanBoxTop.toInt().coerceAtLeast(0),
-                                        scanBoxRight.toInt().coerceAtMost(uprightImageWidth),
-                                        scanBoxBottom.toInt().coerceAtMost(uprightImageHeight)
-                                    )
-
-                                    val inputImage = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-
-                                    scanner.process(inputImage)
-                                        .addOnSuccessListener { barcodes ->
-                                            barcodes.firstOrNull { barcode ->
-                                                val boundingBox = barcode.boundingBox
-                                                // Check if the barcode's bounding box is within our defined scan zone
-                                                boundingBox != null && scanZoneInImageCoordinates.contains(boundingBox)
-                                            }?.let { barcode ->
-                                                Log.d("QRScanner", "Scanned within bounds: ${barcode.rawValue}")
-                                                onAction(QRScannerAction.OnSuccessfulScan(barcode))
-                                                imageAnalysis.clearAnalyzer()
-                                            }
-                                        }
-                                        .addOnFailureListener { exception ->
-                                            Log.e("QRScanner", "Barcode scanning failed", exception)
-                                        }
-                                        .addOnCompleteListener {
-                                            imageProxy.close()
-                                        }
-                                } else {
-                                    imageProxy.close()
-                                }
-                            }
-
-                            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-                            cameraProvider.unbindAll()
-                            cameraProvider.bindToLifecycle(
-                                lifecycleOwner,
-                                cameraSelector,
-                                preview,
-                                imageAnalysis
-                            )
-                        }, ContextCompat.getMainExecutor(context))
-
-                        previewView
-                    },
-                    modifier = Modifier.fillMaxSize()
+                CameraPreview(
+                    modifier = Modifier.fillMaxSize(),
+                    onScanResult = { barcode ->
+                        onAction(QRScannerAction.OnSuccessfulScan(barcode))
+                    }
                 )
-                QRScannerOverlay()
+                QRScannerOverlay(state.isQRProcessing)
             } else {
                 // Permission not accepted, and rationale is not currently shown (dialog will handle rationale)
                 if (!state.showCameraRationale) {

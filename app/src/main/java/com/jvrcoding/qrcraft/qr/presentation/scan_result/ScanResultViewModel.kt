@@ -1,13 +1,23 @@
 package com.jvrcoding.qrcraft.qr.presentation.scan_result
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 
 class ScanResultViewModel(
     savedStateHandle: SavedStateHandle
@@ -16,6 +26,9 @@ class ScanResultViewModel(
     var state by mutableStateOf(ScanResultState())
         private set
 
+    private val eventChannel = Channel<ScanResultEvent>()
+    val events = eventChannel.receiveAsFlow()
+
     private val qrValue: String = savedStateHandle["qrCodeValue"] ?: ""
     private val qrType: Int = savedStateHandle["qrType"] ?: Barcode.TYPE_TEXT
 
@@ -23,8 +36,25 @@ class ScanResultViewModel(
         setResult()
     }
 
+    fun onAction(action: ScanResultAction) {
+        when(action) {
+            ScanResultAction.OnCopyButtonClick -> {
+                viewModelScope.launch {
+                    eventChannel.send(ScanResultEvent.CopyText(qrValue))
+                }
+            }
+            ScanResultAction.OnShareButtonClick -> {
+                viewModelScope.launch {
+                    eventChannel.send(ScanResultEvent.ShareData(qrValue))
+                }
+            }
+            else -> Unit
+        }
+    }
+
     private fun setResult() {
         state = state.copy(
+            qrImage = generateQrCodeBitmap(qrValue, 500),
             contentType = qrType.toQrTypeText(),
             contentValue = qrValue
         )
@@ -32,13 +62,32 @@ class ScanResultViewModel(
 
     fun Int.toQrTypeText(): UiText {
         return when(this) {
-            Barcode.TYPE_GEO -> UiText.StringResource(R.string.link)
+            Barcode.TYPE_GEO -> UiText.StringResource(R.string.geolocation)
             Barcode.TYPE_URL -> UiText.StringResource(R.string.link)
-            Barcode.TYPE_CONTACT_INFO -> UiText.StringResource(R.string.link)
-            Barcode.TYPE_PHONE -> UiText.StringResource(R.string.link)
-            Barcode.TYPE_WIFI -> UiText.StringResource(R.string.link)
-            Barcode.TYPE_TEXT -> UiText.StringResource(R.string.link)
-            else -> UiText.StringResource(R.string.link)
+            Barcode.TYPE_CONTACT_INFO -> UiText.StringResource(R.string.contact)
+            Barcode.TYPE_PHONE -> UiText.StringResource(R.string.phone_number)
+            Barcode.TYPE_WIFI -> UiText.StringResource(R.string.wifi)
+            Barcode.TYPE_TEXT -> UiText.StringResource(R.string.text)
+            else -> UiText.StringResource(R.string.text)
+        }
+    }
+
+    fun generateQrCodeBitmap(content: String, sizePx: Int): Bitmap? {
+        try {
+            val bitMatrix = QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, sizePx, sizePx)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bitmap = createBitmap(width, height)
+
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bitmap[x, y] = if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE
+                }
+            }
+            return bitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
         }
     }
 

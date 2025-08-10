@@ -1,5 +1,8 @@
 package com.jvrcoding.qrcraft.qr.presentation.scan_result
 
+import android.content.ClipData
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +20,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,25 +40,65 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftTo
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.CopyIcon
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ShareIcon
+import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
 import com.jvrcoding.qrcraft.qr.presentation.scan_result.components.ExpandableText
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ScanResultScreenRoot(viewModel: ScanResultViewModel = koinViewModel()) {
+fun ScanResultScreenRoot(
+    viewModel: ScanResultViewModel = koinViewModel(),
+    onBackClick: () -> Unit
+) {
+
+    val context = LocalContext.current
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when(event) {
+            is ScanResultEvent.CopyText -> {
+                scope.launch {
+                    val clipData = ClipData.newPlainText("Qr Value", event.data)
+                    clipboard.setClipEntry(clipData.toClipEntry())
+                    Toast.makeText(context, "Copied!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            is ScanResultEvent.ShareData -> {
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, event.data)
+                    type = "text/plain"
+                }
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
+            }
+        }
+    }
+
     ScanResultScreen(
-        state = viewModel.state
+        state = viewModel.state,
+        onAction = { action ->
+            when(action) {
+                ScanResultAction.OnBackIconClick -> onBackClick()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
     )
 }
 
 @Composable
 fun ScanResultScreen(
-    state: ScanResultState
+    state: ScanResultState,
+    onAction: (ScanResultAction) -> Unit
 ) {
     Scaffold(
         topBar = {
             QRCraftToolbar(
                 title = stringResource(R.string.scan_result),
-                onBackClick = {}
+                onBackClick = {
+                    onAction(ScanResultAction.OnBackIconClick)
+                }
             )
         }
     ) {  innerPadding ->
@@ -68,7 +116,7 @@ fun ScanResultScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    bitmap = state.qrImage!!.asImageBitmap(),
                     contentDescription = "QR Code",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -109,14 +157,18 @@ fun ScanResultScreen(
                         QRCraftButton(
                             text = stringResource(R.string.share),
                             icon = ShareIcon,
-                            onClick = {},
+                            onClick = {
+                                onAction(ScanResultAction.OnShareButtonClick)
+                            },
                             modifier = Modifier
                                 .weight(1f)
                         )
                         QRCraftButton(
                             text = stringResource(R.string.copy),
                             icon = CopyIcon,
-                            onClick = {},
+                            onClick = {
+                                onAction(ScanResultAction.OnCopyButtonClick)
+                            },
                             modifier = Modifier
                                 .weight(1f)
                         )
@@ -133,7 +185,8 @@ fun ScanResultScreen(
 private fun ScanResultScreenPreview() {
     QRCraftTheme {
         ScanResultScreen(
-            state = ScanResultState()
+            state = ScanResultState(),
+            onAction = {}
         )
     }
 }

@@ -17,18 +17,22 @@ fun NavigationRoot(
     ) {
         composable<NavigationRoute.QRScanner> {
             QRSCannerScreenRoot(
-                onNavigateToScanResult = { qrValue ->
+                onNavigateToScanResult = { qrValue, qrType ->
                     navController.navigate(
                         NavigationRoute.ScanResult(
                             qrCodeValue = qrValue,
-                            qrType = 1
+                            qrType = qrType
                         )
                     )
                 }
             )
         }
         composable<NavigationRoute.ScanResult> {
-            ScanResultScreenRoot()
+            ScanResultScreenRoot(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }
