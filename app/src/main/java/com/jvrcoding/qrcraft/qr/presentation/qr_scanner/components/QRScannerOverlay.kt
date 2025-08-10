@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.ui.theme.OnOverlay
-import com.jvrcoding.qrcraft.ui.theme.Overlay
-import com.jvrcoding.qrcraft.ui.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnOverlay
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Overlay
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 
 @Composable
 fun QRScannerOverlay() {

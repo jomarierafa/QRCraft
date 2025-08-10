@@ -6,4 +6,14 @@
     <string name="camera_required">Camera Required</string>
     <string name="rationale_dialog_message">This app cannot function without camera access. To scan QR codes, please grant permission.</string>
     <string name="camera_permission_granted">Camera permission granted</string>
+    <string name="go_back">go back</string>
+    <string name="scan_result">Scan Result</string>
+    <string name="share">Share</string>
+    <string name="copy">Copy</string>
+    <string name="text">Text</string>
+    <string name="link">Link</string>
+    <string name="contact">Contact</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="geolocation">Geolocation</string>
+    <string name="wifi">Wi-Fi</string>
 </resources>

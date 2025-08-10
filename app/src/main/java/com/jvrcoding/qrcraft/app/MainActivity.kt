@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.jvrcoding.qrcraft.app.navigation.NavigationRoot
-import com.jvrcoding.qrcraft.ui.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

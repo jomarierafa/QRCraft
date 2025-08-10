@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.graphics.Rect
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -50,6 +51,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftDialog
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftSnackBar
+import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
 import com.jvrcoding.qrcraft.qr.presentation.util.shouldShowCameraPermissionRationale
@@ -60,9 +62,27 @@ import kotlin.math.min
 
 @Composable
 fun QRSCannerScreenRoot(
-    onNavigateToScanResult: () -> Unit,
+    onNavigateToScanResult: (String) -> Unit,
     viewModel: QRScannerViewModel = koinViewModel(),
 ){
+
+    val context = LocalContext.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when(event) {
+            is QRScannerEvent.Error -> {
+                Toast.makeText(
+                    context,
+                    event.error.asString(context),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            is QRScannerEvent.ScanResult -> {
+                onNavigateToScanResult(event.qrValue)
+            }
+        }
+    }
+
     QRScannerScreen(
         state = viewModel.state,
         onAction = { action ->
@@ -162,7 +182,7 @@ fun QRScannerScreen(
 
                             imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(context)) { imageProxy ->
                                 val mediaImage = imageProxy.image
-                                if (mediaImage != null /*&& state.isScanning*/) {
+                                if (mediaImage != null /*&& !state.isScanning*/) {
                                     // Calculate the scan zone based on the image dimensions
                                     val imageWidth = imageProxy.width
                                     val imageHeight = imageProxy.height
@@ -203,8 +223,10 @@ fun QRScannerScreen(
                                                 val boundingBox = barcode.boundingBox
                                                 // Check if the barcode's bounding box is within our defined scan zone
                                                 boundingBox != null && scanZoneInImageCoordinates.contains(boundingBox)
-                                            }?.rawValue?.let { value ->
-                                                Log.d("QRScanner", "Scanned within bounds: $value")
+                                            }?.let { barcode ->
+                                                Log.d("QRScanner", "Scanned within bounds: ${barcode.rawValue}")
+                                                onAction(QRScannerAction.OnSuccessfulScan(barcode))
+                                                imageAnalysis.clearAnalyzer()
                                             }
                                         }
                                         .addOnFailureListener { exception ->

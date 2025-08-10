@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.ui.theme
+package com.jvrcoding.qrcraft.core.presentation.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -15,6 +15,7 @@ val Surface = Color(0xFFEDF2F5)
 val SurfaceHigher = Color(0xFFFFFFFF)
 val OnSurface = Color(0xFF273037)
 val OnSurfaceAlt = Color(0xFF505F6A)
+val OnSurfaceDisabled = Color(0xFF8C99A2)
 val Overlay = Color(0xFF000000).copy(alpha = 0.5f)
 val OnOverlay = Color(0xFFFFFFFF)
 val Link = Color(0xFF373F05)

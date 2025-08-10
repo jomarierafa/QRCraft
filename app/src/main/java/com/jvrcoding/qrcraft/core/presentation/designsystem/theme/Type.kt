@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.ui.theme
+package com.jvrcoding.qrcraft.core.presentation.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
