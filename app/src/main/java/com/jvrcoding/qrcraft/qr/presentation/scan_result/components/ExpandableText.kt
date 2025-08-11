@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.qr.presentation.scan_result.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,7 @@ fun ExpandableText(
     var isExpanded by remember { mutableStateOf(false) }
     var isOverflowing by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.animateContentSize()) {
         Text(
             text = text,
             maxLines = if (isExpanded) Int.MAX_VALUE else collapsedMaxLines,
