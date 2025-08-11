@@ -55,6 +55,7 @@ class ScanResultViewModel(
     private fun setResult() {
         state = state.copy(
             qrImage = generateQrCodeBitmap(qrValue, 500),
+            contentTypeId = qrType,
             contentType = qrType.toQrTypeText(),
             contentValue = qrValue
         )
