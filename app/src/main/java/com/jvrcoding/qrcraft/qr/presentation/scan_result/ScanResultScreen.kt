@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftButton
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
@@ -55,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 
 @Composable
 fun ScanResultScreenRoot(
@@ -164,14 +164,14 @@ fun ScanResultScreen(
                     )
 
                     when (state.contentTypeId) {
-                        Barcode.TYPE_TEXT -> {
+                        QrType.TEXT -> {
                             ExpandableText(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = state.contentValue
                             )
                         }
 
-                        Barcode.TYPE_URL -> {
+                        QrType.LINK -> {
                             Text(
                                 text = state.contentValue,
                                 style = MaterialTheme.typography.labelLarge,
@@ -238,7 +238,7 @@ private fun ScanResultScreenPreview() {
     QRCraftTheme {
         ScanResultScreen(
             state = ScanResultState(
-                contentTypeId = Barcode.TYPE_URL,
+                contentTypeId = QrType.TEXT,
                 contentValue = "hello world\n wwwwertyqwertyqwerty",
 //                contentValue = "Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum justo metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium. Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium."
             ),

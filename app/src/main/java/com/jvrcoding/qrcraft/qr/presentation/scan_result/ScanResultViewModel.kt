@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 import com.jvrcoding.qrcraft.R
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 
 class ScanResultViewModel(
     savedStateHandle: SavedStateHandle
@@ -30,7 +30,7 @@ class ScanResultViewModel(
     val events = eventChannel.receiveAsFlow()
 
     private val qrValue: String = savedStateHandle["qrCodeValue"] ?: ""
-    private val qrType: Int = savedStateHandle["qrType"] ?: Barcode.TYPE_TEXT
+    private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
 
     init {
         setResult()
@@ -61,14 +61,13 @@ class ScanResultViewModel(
         )
     }
 
-    fun Int.toQrTypeText(): UiText {
+    fun QrType.toQrTypeText(): UiText {
         return when(this) {
-            Barcode.TYPE_GEO -> UiText.StringResource(R.string.geolocation)
-            Barcode.TYPE_URL -> UiText.StringResource(R.string.link)
-            Barcode.TYPE_CONTACT_INFO -> UiText.StringResource(R.string.contact)
-            Barcode.TYPE_PHONE -> UiText.StringResource(R.string.phone_number)
-            Barcode.TYPE_WIFI -> UiText.StringResource(R.string.wifi)
-            Barcode.TYPE_TEXT -> UiText.StringResource(R.string.text)
+            QrType.GEOLOCATION -> UiText.StringResource(R.string.geolocation)
+            QrType.LINK -> UiText.StringResource(R.string.link)
+            QrType.CONTACT -> UiText.StringResource(R.string.contact)
+            QrType.PHONE -> UiText.StringResource(R.string.phone_number)
+            QrType.WIFI -> UiText.StringResource(R.string.wifi)
             else -> UiText.StringResource(R.string.text)
         }
     }

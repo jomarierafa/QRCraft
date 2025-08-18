@@ -38,6 +38,7 @@ import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftDialog
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftSnackBar
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
+import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.CameraPreview
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
@@ -48,7 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun QRSCannerScreenRoot(
-    onNavigateToScanResult: (String, Int) -> Unit,
+    onNavigateToScanResult: (ScanResultDetail) -> Unit,
     viewModel: QRScannerViewModel = koinViewModel(),
 ){
 
@@ -64,10 +65,7 @@ fun QRSCannerScreenRoot(
             }
 
             is QRScannerEvent.ScanResult -> {
-                onNavigateToScanResult(
-                    event.qrValue,
-                    event.type
-                )
+                onNavigateToScanResult(event.scanResultDetail)
             }
         }
     }
@@ -148,9 +146,7 @@ fun QRScannerScreen(
             if (state.hasCameraPermission) {
                 CameraPreview(
                     modifier = Modifier.fillMaxSize(),
-                    onScanResult = { barcode ->
-                        onAction(QRScannerAction.OnSuccessfulScan(barcode))
-                    }
+                    onAction = onAction
                 )
                 QRScannerOverlay(state.isQRProcessing)
             } else {

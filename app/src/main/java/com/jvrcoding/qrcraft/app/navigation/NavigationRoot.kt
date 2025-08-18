@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRSCannerScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.scan_result.ScanResultScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.util.toScanResultRoute
 
 @Composable
 fun NavigationRoot(
@@ -17,13 +18,8 @@ fun NavigationRoot(
     ) {
         composable<NavigationRoute.QRScanner> {
             QRSCannerScreenRoot(
-                onNavigateToScanResult = { qrValue, qrType ->
-                    navController.navigate(
-                        NavigationRoute.ScanResult(
-                            qrCodeValue = qrValue,
-                            qrType = qrType
-                        )
-                    )
+                onNavigateToScanResult = { scanResultDetail ->
+                    navController.navigate(scanResultDetail.toScanResultRoute())
                 }
             )
         }

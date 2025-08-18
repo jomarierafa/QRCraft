@@ -1,7 +1,6 @@
 package com.jvrcoding.qrcraft.app.navigation
 
-import com.google.mlkit.vision.barcode.common.Barcode
-import kotlinx.serialization.Contextual
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 import kotlinx.serialization.Serializable
 
 sealed interface NavigationRoute {
@@ -11,7 +10,7 @@ sealed interface NavigationRoute {
     @Serializable
     data class ScanResult(
         val qrCodeValue: String,
-        val qrType: Int
+        val qrType: QrType
     ): NavigationRoute
 
 }

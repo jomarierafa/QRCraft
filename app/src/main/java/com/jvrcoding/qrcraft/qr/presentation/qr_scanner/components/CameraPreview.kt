@@ -10,13 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.camera.QRAnalyzer
+import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerAction
 
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
-    onScanResult: (Barcode) -> Unit
+    onAction: (QRScannerAction) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -37,9 +36,10 @@ fun CameraPreview(
                     .build()
                     .apply {
                         setAnalyzer(
-                            ContextCompat.getMainExecutor(context),
-                            QRAnalyzer(onScanResult, this)
-                        )
+                            ContextCompat.getMainExecutor(context)
+                        ) { imageProxy ->
+                            onAction(QRScannerAction.OnProcessImage(imageProxy, this))
+                        }
                     }
 
 

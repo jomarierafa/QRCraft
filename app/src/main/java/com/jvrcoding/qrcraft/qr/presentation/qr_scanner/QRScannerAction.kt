@@ -1,6 +1,7 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
-import com.google.mlkit.vision.barcode.common.Barcode
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 
 sealed interface QRScannerAction {
     data class SubmitCameraPermissionInfo(
@@ -8,7 +9,8 @@ sealed interface QRScannerAction {
         val showCameraRationale: Boolean
     ): QRScannerAction
     data object DismissRationaleDialog: QRScannerAction
-    data class OnSuccessfulScan(
-        val barcode: Barcode
+    data class OnProcessImage(
+        val imageProxy: ImageProxy,
+        val imageAnalysis: ImageAnalysis
     ): QRScannerAction
 }
