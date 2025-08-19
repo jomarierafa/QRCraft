@@ -108,6 +108,7 @@ fun ScanResultScreen(
         topBar = {
             QRCraftToolbar(
                 title = stringResource(R.string.scan_result),
+                showBackButton = true,
                 onBackClick = {
                     onAction(ScanResultAction.OnBackIconClick)
                 }

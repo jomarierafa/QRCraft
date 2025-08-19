@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnOverlay
@@ -23,27 +22,31 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 @Composable
 fun QRCraftToolbar(
     title: String,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    showBackButton:  Boolean,
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {},
+    textColor: Color = OnOverlay,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
         title = {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium.copy(color = OnOverlay),
+                style = MaterialTheme.typography.titleMedium.copy(color = textColor),
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent
         ),
         navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.go_back),
-                    tint = OnOverlay
-                )
+            if(showBackButton) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.go_back),
+                        tint = OnOverlay
+                    )
+                }
             }
         },
     )
@@ -55,6 +58,7 @@ private fun QRCraftToolbarPreview() {
     QRCraftTheme {
         QRCraftToolbar(
             title = "Scan Result",
+            showBackButton = true,
             onBackClick = {}
         )
     }
