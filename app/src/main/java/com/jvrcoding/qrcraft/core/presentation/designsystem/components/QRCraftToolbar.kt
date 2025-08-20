@@ -44,7 +44,7 @@ fun QRCraftToolbar(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.go_back),
-                        tint = OnOverlay
+                        tint = textColor
                     )
                 }
             }

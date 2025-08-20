@@ -20,4 +20,13 @@
     <string name="loading">Loading…</string>
     <string name="generate_qr">Generate Qr</string>
     <string name="scan_qr">Scan Qr</string>
+    <string name="generate_qr_code">Generate QR-Code</string>
+    <string name="url">URL</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="ssid">SSID</string>
+    <string name="password">Password</string>
+    <string name="encryption_type">Encryption Type</string>
 </resources>
