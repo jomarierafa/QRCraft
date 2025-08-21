@@ -9,14 +9,14 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrScannerRepository
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.math.min
 
 @ExperimentalCoroutinesApi
-class QrScannerRepositoryImpl() : QrScannerRepository {
+class MLKitScanner() : QrScanner {
 
     val scanner = BarcodeScanning.getClient(
         BarcodeScannerOptions.Builder()
@@ -67,7 +67,11 @@ class QrScannerRepositoryImpl() : QrScannerRepository {
                         val format = getQrFormat(it.valueType)
                         Log.d("QrScannerRepository", "scan: $format")
                         cont.resume(
-                            ScanResultDetail(qrValue, format),
+                            ScanResultDetail(
+                                qrValue,
+                                it.rawValue ?: "",
+                                format
+                            ),
                             null
                         )
                     }

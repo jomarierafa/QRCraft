@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -22,6 +23,11 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 
 @Composable
 fun QRWifiDataForm(
+    ssid: TextFieldState,
+    password: TextFieldState,
+    encryption: TextFieldState,
+    buttonEnable: Boolean,
+    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -36,24 +42,25 @@ fun QRWifiDataForm(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         QRTextField(
-            state = rememberTextFieldState(),
+            state = ssid,
             hint = stringResource(R.string.ssid),
             lineLimits = TextFieldLineLimits.SingleLine
         )
         QRTextField(
-            state = rememberTextFieldState(),
+            state = password,
             hint = stringResource(R.string.password),
             lineLimits = TextFieldLineLimits.SingleLine,
         )
         QRTextField(
-            state = rememberTextFieldState(),
+            state = encryption,
             hint = stringResource(R.string.encryption_type),
             lineLimits = TextFieldLineLimits.SingleLine,
         )
         Spacer(modifier = Modifier)
         QRCraftButton(
+            enabled = buttonEnable,
             text = stringResource(R.string.generate_qr_code),
-            onClick = {},
+            onClick = onButtonClick,
             modifier = Modifier.fillMaxWidth(),
             containerColor = MaterialTheme.colorScheme.primary
         )
@@ -65,6 +72,12 @@ fun QRWifiDataForm(
 @Composable
 private fun QRWifiDataFormPreview() {
     QRCraftTheme {
-        QRWifiDataForm()
+        QRWifiDataForm(
+            ssid = rememberTextFieldState(),
+            password = rememberTextFieldState(),
+            encryption = rememberTextFieldState(),
+            buttonEnable = true,
+            onButtonClick = {}
+        )
     }
 }

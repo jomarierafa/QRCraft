@@ -1,7 +1,9 @@
 package com.jvrcoding.qrcraft.qr.di
 
-import com.jvrcoding.qrcraft.qr.data.scanner.QrScannerRepositoryImpl
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrScannerRepository
+import com.jvrcoding.qrcraft.qr.data.qr_generator.ZxingQrCodeGenerator
+import com.jvrcoding.qrcraft.qr.data.scanner.MLKitScanner
+import com.jvrcoding.qrcraft.qr.domain.qr_generator.QrCodeGenerator
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.DataEntryViewModel
 import com.jvrcoding.qrcraft.qr.presentation.main.MainViewModel
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerViewModel
@@ -20,6 +22,7 @@ val qrModule = module {
     viewModelOf(::MainViewModel)
     viewModelOf(::DataEntryViewModel)
 
-    singleOf(::QrScannerRepositoryImpl).bind<QrScannerRepository>()
+    singleOf(::MLKitScanner).bind<QrScanner>()
+    singleOf(::ZxingQrCodeGenerator).bind<QrCodeGenerator>()
 
 }

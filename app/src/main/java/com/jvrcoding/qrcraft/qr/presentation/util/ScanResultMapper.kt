@@ -6,6 +6,7 @@ import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
 fun ScanResultDetail.toScanResultRoute(): NavigationRoute.ScanResult {
     return NavigationRoute.ScanResult(
         qrCodeValue = this.qrValue,
+        qrCodeRawValue = this.qrRawValue,
         qrType = this.qrType
     )
 }
@@ -13,6 +14,7 @@ fun ScanResultDetail.toScanResultRoute(): NavigationRoute.ScanResult {
 fun NavigationRoute.ScanResult.toScanResult(): ScanResultDetail {
     return ScanResultDetail(
         qrValue = this.qrCodeValue,
+        qrRawValue = this.qrCodeRawValue,
         qrType = this.qrType
     )
 }

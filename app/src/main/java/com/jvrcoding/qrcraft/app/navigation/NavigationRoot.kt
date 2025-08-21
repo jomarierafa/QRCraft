@@ -30,6 +30,9 @@ fun NavigationRoot(
 
         composable<NavigationRoute.DataEntry> {
             DataEntryScreenRoot(
+                onNavigateToScanResult = {
+                    navController.navigate(it.toScanResultRoute())
+                },
                 onBackClick = {
                     navController.navigateUp()
                 }

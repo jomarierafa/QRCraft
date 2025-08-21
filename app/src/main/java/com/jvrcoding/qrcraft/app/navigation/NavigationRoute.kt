@@ -22,6 +22,7 @@ sealed interface NavigationRoute {
     @Serializable
     data class ScanResult(
         val qrCodeValue: String,
+        val qrCodeRawValue: String,
         val qrType: QrType
     ): NavigationRoute
 

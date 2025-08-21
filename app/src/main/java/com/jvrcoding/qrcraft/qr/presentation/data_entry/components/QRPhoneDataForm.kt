@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -22,6 +23,9 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 
 @Composable
 fun QRPhoneDataForm(
+    phoneNumber: TextFieldState,
+    buttonEnable: Boolean,
+    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -36,14 +40,15 @@ fun QRPhoneDataForm(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         QRTextField(
-            state = rememberTextFieldState(),
+            state = phoneNumber,
             hint = stringResource(R.string.phone_number),
             lineLimits = TextFieldLineLimits.SingleLine,
             keyboardType = KeyboardType.Phone
         )
         QRCraftButton(
+            enabled = buttonEnable,
             text = stringResource(R.string.generate_qr_code),
-            onClick = {},
+            onClick = onButtonClick,
             modifier = Modifier.fillMaxWidth(),
             containerColor = MaterialTheme.colorScheme.primary
         )
@@ -56,6 +61,10 @@ fun QRPhoneDataForm(
 @Composable
 private fun QRPhoneDataFormPreview() {
     QRCraftTheme {
-        QRPhoneDataForm()
+        QRPhoneDataForm(
+            phoneNumber = rememberTextFieldState(),
+            buttonEnable = true,
+            onButtonClick = {}
+        )
     }
 }

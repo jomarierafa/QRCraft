@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,6 +24,10 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 
 @Composable
 fun QRGeoDataForm(
+    latitude: TextFieldState,
+    longitude: TextFieldState,
+    buttonEnable: Boolean,
+    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -37,21 +42,22 @@ fun QRGeoDataForm(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         QRTextField(
-            state = rememberTextFieldState(),
+            state = latitude,
             hint = stringResource(R.string.latitude),
             lineLimits = TextFieldLineLimits.SingleLine,
             keyboardType = KeyboardType.Decimal
         )
         QRTextField(
-            state = rememberTextFieldState(),
+            state = longitude,
             hint = stringResource(R.string.longitude),
             lineLimits = TextFieldLineLimits.SingleLine,
             keyboardType = KeyboardType.Decimal
         )
         Spacer(modifier = Modifier)
         QRCraftButton(
+            enabled = buttonEnable,
             text = stringResource(R.string.generate_qr_code),
-            onClick = {},
+            onClick = onButtonClick,
             modifier = Modifier.fillMaxWidth(),
             containerColor = MaterialTheme.colorScheme.primary
         )
@@ -63,6 +69,11 @@ fun QRGeoDataForm(
 @Composable
 private fun QRGeoDataFormPreview() {
     QRCraftTheme {
-        QRGeoDataForm()
+        QRGeoDataForm(
+            latitude = rememberTextFieldState(),
+            longitude = rememberTextFieldState(),
+            buttonEnable = true,
+            onButtonClick = {}
+        )
     }
 }

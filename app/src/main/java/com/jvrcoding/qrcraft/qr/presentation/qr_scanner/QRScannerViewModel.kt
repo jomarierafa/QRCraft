@@ -7,14 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrScannerRepository
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class QRScannerViewModel(
-    private val qrScannerRepository: QrScannerRepository
+    private val qrScanner: QrScanner
 ): ViewModel() {
 
     var state by mutableStateOf(QRScannerState())
@@ -34,7 +34,7 @@ class QRScannerViewModel(
 
     private fun processImage(imageProxy: ImageProxy, imageAnalysis: ImageAnalysis) {
         viewModelScope.launch {
-            val result = qrScannerRepository.scan(imageProxy)
+            val result = qrScanner.scan(imageProxy)
             if (result != null && !state.isQRProcessing) {
                 imageAnalysis.clearAnalyzer()
                 state = state.copy(isQRProcessing = true)
