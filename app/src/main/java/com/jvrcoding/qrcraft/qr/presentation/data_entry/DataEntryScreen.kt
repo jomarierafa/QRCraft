@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -13,24 +12,44 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRContactDataForm
+import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRGeoDataForm
+import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRLinkDataForm
+import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRPhoneDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRTextDataForm
+import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRWifiDataForm
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun DataEntryScreenRoot() {
-    DataScreen()
+fun DataEntryScreenRoot(
+    onBackClick: () -> Unit,
+    viewModel: DataEntryViewModel = koinViewModel(),
+) {
+    DataScreen(
+        state = viewModel.state,
+        onAction = { action ->
+            when (action) {
+                DataEntryAction.OnBackClick -> onBackClick()
+            }
+        }
+    )
 }
 
 @Composable
-fun DataScreen() {
+fun DataScreen(
+    state: DataEntryState,
+    onAction: (DataEntryAction) -> Unit
+) {
     Scaffold(
         topBar = {
             QRCraftToolbar(
-                title = "Text",
+                title = state.toolbarText.asString(),
                 showBackButton = true,
                 textColor = MaterialTheme.colorScheme.onSurface,
+                onBackClick = { onAction(DataEntryAction.OnBackClick)}
             )
         },
     ) { innerPadding ->
@@ -43,11 +62,14 @@ fun DataScreen() {
             contentAlignment = Alignment.TopCenter
         ) {
 
-            QRTextDataForm(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .widthIn(max = 480.dp)
-            )
+            when(state.qrType) {
+                QrType.TEXT -> QRTextDataForm()
+                QrType.LINK -> QRLinkDataForm()
+                QrType.GEOLOCATION -> QRGeoDataForm()
+                QrType.WIFI -> QRWifiDataForm()
+                QrType.CONTACT -> QRContactDataForm()
+                QrType.PHONE -> QRPhoneDataForm()
+            }
         }
     }
 }
@@ -56,6 +78,9 @@ fun DataScreen() {
 @Composable
 private fun DataScreenPreview() {
     QRCraftTheme {
-        DataScreen()
+        DataScreen(
+            state = DataEntryState(),
+            onAction = {}
+        )
     }
 }

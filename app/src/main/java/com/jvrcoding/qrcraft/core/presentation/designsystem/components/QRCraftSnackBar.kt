@@ -2,7 +2,9 @@ package com.jvrcoding.qrcraft.core.presentation.designsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -11,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Success
+import com.jvrcoding.qrcraft.qr.presentation.main.components.QRBottomNavigation
+import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 
 @Composable
 fun QRCraftSnackBar(
@@ -60,12 +65,35 @@ fun QRCraftSnackBar(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun QRCraftSnackBarPreview() {
     QRCraftTheme {
-        QRCraftSnackBar(
-            message = "Camera permission granted",
-        )
+        Scaffold(
+            snackbarHost = {
+                QRCraftSnackBar(
+                    message = "Camera permission granted",
+                )
+            },
+            bottomBar = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    QRBottomNavigation(
+                        selectedItemId = BottomNavItem.CREATE_QR,
+                        onItemClick = { item ->
+                        },
+                    )
+                }
+            }
+        ) {
+
+        }
+//        QRCraftSnackBar(
+//            message = "Camera permission granted",
+//        )
     }
 }

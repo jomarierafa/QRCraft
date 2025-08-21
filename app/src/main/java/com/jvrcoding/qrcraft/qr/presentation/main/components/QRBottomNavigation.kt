@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.core.presentation.designsystem.components
+package com.jvrcoding.qrcraft.qr.presentation.main.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,13 +24,14 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.RefreshIcon
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ScanIcon
+import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 
 @Composable
 fun QRBottomNavigation(
-    modifier: Modifier = Modifier
+    selectedItemId: BottomNavItem,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit
 ) {
-    val selectedBackgroundColor = LinkBG
-    val unselectedBackgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh
     Box(
         contentAlignment = Alignment.Center
     ) {
@@ -45,9 +46,15 @@ fun QRBottomNavigation(
         ) {
             IconButton(
                 modifier = Modifier
-                    .background(Color.White, CircleShape)
+                    .background(
+                        color = if(selectedItemId == BottomNavItem.HISTORY)
+                            LinkBG
+                        else
+                            Color.Transparent,
+                        shape = CircleShape
+                    )
                     .size(44.dp),
-                onClick = {}
+                onClick = { onItemClick(BottomNavItem.HISTORY)}
             ) {
                 Icon(
                     imageVector = RefreshIcon,
@@ -61,9 +68,15 @@ fun QRBottomNavigation(
 
             IconButton(
                 modifier = Modifier
-                    .background(selectedBackgroundColor, CircleShape)
+                    .background(
+                        color = if(selectedItemId == BottomNavItem.CREATE_QR)
+                            LinkBG
+                        else
+                            Color.Transparent,
+                        shape = CircleShape
+                    )
                     .size(44.dp),
-                onClick = {}
+                onClick = {  onItemClick(BottomNavItem.CREATE_QR) }
             ) {
                 Icon(
                     imageVector = AddIcon,
@@ -79,7 +92,7 @@ fun QRBottomNavigation(
                 .size(64.dp)
                 .background(MaterialTheme.colorScheme.primary, CircleShape)
                 .align(Alignment.Center),
-            onClick = {}
+            onClick = {  onItemClick(BottomNavItem.SCAN_QR)}
         ) {
             Icon(
                 imageVector = ScanIcon,
@@ -96,6 +109,9 @@ fun QRBottomNavigation(
 @Composable
 private fun QRBottomNavigationPreview() {
     QRCraftTheme {
-        QRBottomNavigation()
+        QRBottomNavigation(
+            selectedItemId = BottomNavItem.CREATE_QR,
+            onItemClick = {}
+        )
     }
 }

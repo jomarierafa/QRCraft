@@ -18,26 +18,34 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftTo
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.DeviceLayoutType
 import com.jvrcoding.qrcraft.core.presentation.util.rememberDeviceLayoutType
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.components.GridItem
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.model.menuItems
 
 
 @Composable
-fun CreateQrScreenRoot() {
-    CreateQrScreenRoot()
+fun CreateQrScreenRoot(
+    onItemClick: (QrType) -> Unit,
+) {
+    CreateQrScreen(
+        onAction = { action ->
+            when (action) {
+                is CreateQrAction.OnItemClicked -> onItemClick(action.qrType)
+            }
+        }
+    )
 }
 
 @Composable
-fun CreateQrScreen() {
+fun CreateQrScreen(
+    onAction: (CreateQrAction) -> Unit,
+) {
     Scaffold(
         topBar = {
             QRCraftToolbar(
                 title = "Create QR",
                 textColor = MaterialTheme.colorScheme.onSurface,
                 showBackButton = false,
-                onBackClick = {
-
-                }
             )
         }
     ) { innerPadding ->
@@ -60,7 +68,9 @@ fun CreateQrScreen() {
                     text = item.label.asString(),
                     iconRes = item.iconRes,
                     tint = item.iconColor,
-                    onClick = {  }
+                    onClick = {
+                        onAction(CreateQrAction.OnItemClicked(item.qrType))
+                    }
                 )
             }
         }
@@ -71,6 +81,8 @@ fun CreateQrScreen() {
 @Composable
 private fun CreateQrScreenPreview() {
     QRCraftTheme {
-        CreateQrScreen()
+        CreateQrScreen(
+            onAction = {}
+        )
     }
 }

@@ -10,31 +10,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.util.UiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 
 class ScanResultViewModel(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    var state by mutableStateOf(ScanResultState())
+    private val qrValue: String = savedStateHandle["qrCodeValue"] ?: ""
+    private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
+
+    var state by mutableStateOf(ScanResultState(
+        qrImage = generateQrCodeBitmap(qrValue, 500),
+        contentTypeId = qrType,
+        contentType = qrType.toQrTypeText(),
+        contentValue = qrValue
+    ))
         private set
 
     private val eventChannel = Channel<ScanResultEvent>()
     val events = eventChannel.receiveAsFlow()
-
-    private val qrValue: String = savedStateHandle["qrCodeValue"] ?: ""
-    private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
-
-    init {
-        setResult()
-    }
 
     fun onAction(action: ScanResultAction) {
         when(action) {
@@ -49,26 +49,6 @@ class ScanResultViewModel(
                 }
             }
             else -> Unit
-        }
-    }
-
-    private fun setResult() {
-        state = state.copy(
-            qrImage = generateQrCodeBitmap(qrValue, 500),
-            contentTypeId = qrType,
-            contentType = qrType.toQrTypeText(),
-            contentValue = qrValue
-        )
-    }
-
-    fun QrType.toQrTypeText(): UiText {
-        return when(this) {
-            QrType.GEOLOCATION -> UiText.StringResource(R.string.geolocation)
-            QrType.LINK -> UiText.StringResource(R.string.link)
-            QrType.CONTACT -> UiText.StringResource(R.string.contact)
-            QrType.PHONE -> UiText.StringResource(R.string.phone_number)
-            QrType.WIFI -> UiText.StringResource(R.string.wifi)
-            else -> UiText.StringResource(R.string.text)
         }
     }
 

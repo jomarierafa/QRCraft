@@ -28,12 +28,12 @@ fun GridItem(
 ) {
     Column(
         modifier = modifier
+            .clickable(onClick = onClick)
             .height(108.dp)
             .background(
                 MaterialTheme.colorScheme.surfaceContainerHigh,
                 RoundedCornerShape(16.dp))
-            .padding(16.dp)
-            .clickable{ onClick },
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

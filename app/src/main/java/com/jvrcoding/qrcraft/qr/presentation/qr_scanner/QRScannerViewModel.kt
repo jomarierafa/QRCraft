@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScannerRepository
-import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerEvent.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -30,19 +29,6 @@ class QRScannerViewModel(
             is QRScannerAction.OnProcessImage -> {
                 processImage(action.imageProxy, action.imageAnalysis)
             }
-
-            is QRScannerAction.SubmitCameraPermissionInfo -> {
-                state = state.copy(
-                    hasCameraPermission = action.acceptedCameraPermission,
-                    showCameraRationale = action.showCameraRationale
-                )
-            }
-
-            QRScannerAction.DismissRationaleDialog -> {
-                state = state.copy(
-                    showCameraRationale = false
-                )
-            }
         }
     }
 
@@ -55,7 +41,7 @@ class QRScannerViewModel(
 
                 delay(500)
                 eventChannel.send(
-                    ScanResult(scanResultDetail = result)
+                    QRScannerEvent.ScanResult(scanResultDetail = result)
                 )
 
                 delay(500)

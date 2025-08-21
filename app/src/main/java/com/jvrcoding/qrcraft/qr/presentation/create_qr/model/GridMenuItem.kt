@@ -10,37 +10,49 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Phone
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Text
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Wifi
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
+import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 
-sealed class GridMenuItem(val label: UiText, val iconRes: Int, val iconColor: Color) {
+sealed class GridMenuItem(
+    val label: UiText,
+    val iconRes: Int,
+    val iconColor: Color,
+    val qrType: QrType
+) {
     object QrText : GridMenuItem(
         label = UiText.StringResource(R.string.text),
         iconRes = R.drawable.ic_text,
-        iconColor = Text
+        iconColor = Text,
+        qrType = QrType.TEXT
     )
     object QrLink : GridMenuItem(
         label = UiText.StringResource(R.string.link),
         iconRes = R.drawable.ic_link,
-        iconColor = Link
+        iconColor = Link,
+        qrType = QrType.LINK
     )
     object QrContact : GridMenuItem(
         label = UiText.StringResource(R.string.contact),
         iconRes = R.drawable.ic_contact,
-        iconColor = Contact
+        iconColor = Contact,
+        qrType = QrType.CONTACT
     )
     object QrPhone : GridMenuItem(
         label = UiText.StringResource(R.string.phone),
         iconRes = R.drawable.ic_phone,
-        iconColor = Phone
+        iconColor = Phone,
+        qrType = QrType.PHONE
     )
     object QrGeolocation : GridMenuItem(
         label = UiText.StringResource(R.string.geolocation),
         iconRes = R.drawable.ic_geolocation,
-        iconColor = Geo
+        iconColor = Geo,
+        qrType = QrType.GEOLOCATION
     )
     object QrWifi : GridMenuItem(
         label = UiText.StringResource(R.string.wifi),
         iconRes = R.drawable.ic_wifi,
-        iconColor = Wifi
+        iconColor = Wifi,
+        qrType = QrType.WIFI
     )
 }
 
