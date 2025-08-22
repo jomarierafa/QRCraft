@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,17 +45,16 @@ fun QRBottomNavigation(
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                modifier = Modifier
-                    .background(
-                        color = if(selectedItemId == BottomNavItem.HISTORY)
-                            LinkBG
-                        else
-                            Color.Transparent,
-                        shape = CircleShape
-                    )
-                    .size(44.dp),
-                onClick = { onItemClick(BottomNavItem.HISTORY)}
+            FilledIconButton(
+                modifier = Modifier.size(44.dp),
+                onClick = { onItemClick(BottomNavItem.HISTORY)},
+                shape = CircleShape,
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = if(selectedItemId == BottomNavItem.HISTORY)
+                        LinkBG
+                    else
+                        Color.Transparent,
+                )
             ) {
                 Icon(
                     imageVector = RefreshIcon,
@@ -66,16 +66,15 @@ fun QRBottomNavigation(
 
             Spacer(Modifier.width(70.dp))
 
-            IconButton(
-                modifier = Modifier
-                    .background(
-                        color = if(selectedItemId == BottomNavItem.CREATE_QR)
-                            LinkBG
-                        else
-                            Color.Transparent,
-                        shape = CircleShape
-                    )
-                    .size(44.dp),
+            FilledIconButton(
+                modifier = Modifier.size(44.dp),
+                shape = CircleShape,
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = if(selectedItemId == BottomNavItem.CREATE_QR)
+                        LinkBG
+                    else
+                        Color.Transparent,
+                ),
                 onClick = {  onItemClick(BottomNavItem.CREATE_QR) }
             ) {
                 Icon(
@@ -87,11 +86,12 @@ fun QRBottomNavigation(
             }
         }
 
-        IconButton(
-            modifier = Modifier
-                .size(64.dp)
-                .background(MaterialTheme.colorScheme.primary, CircleShape)
-                .align(Alignment.Center),
+        FilledIconButton(
+            modifier = Modifier.size(64.dp),
+            shape = CircleShape,
+            colors =  IconButtonDefaults.filledIconButtonColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            ),
             onClick = {  onItemClick(BottomNavItem.SCAN_QR)}
         ) {
             Icon(
