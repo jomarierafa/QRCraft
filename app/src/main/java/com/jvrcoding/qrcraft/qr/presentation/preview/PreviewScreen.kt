@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr.presentation.scan_result
+package com.jvrcoding.qrcraft.qr.presentation.preview
 
 import android.content.ClipData
 import android.content.Intent
@@ -48,7 +48,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.CopyIcon
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ShareIcon
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
-import com.jvrcoding.qrcraft.qr.presentation.scan_result.components.ExpandableText
+import com.jvrcoding.qrcraft.qr.presentation.preview.components.ExpandableText
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
@@ -58,7 +58,7 @@ import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 
 @Composable
 fun ScanResultScreenRoot(
-    viewModel: ScanResultViewModel = koinViewModel(),
+    viewModel: PreviewViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
 
@@ -67,14 +67,14 @@ fun ScanResultScreenRoot(
     val scope = rememberCoroutineScope()
     ObserveAsEvents(flow = viewModel.events) { event ->
         when(event) {
-            is ScanResultEvent.CopyText -> {
+            is PreviewEvent.CopyText -> {
                 scope.launch {
                     val clipData = ClipData.newPlainText("Qr Value", event.data)
                     clipboard.setClipEntry(clipData.toClipEntry())
                     Toast.makeText(context, "Copied!", Toast.LENGTH_SHORT).show()
                 }
             }
-            is ScanResultEvent.ShareData -> {
+            is PreviewEvent.ShareData -> {
                 val sendIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, event.data)
@@ -90,7 +90,7 @@ fun ScanResultScreenRoot(
         state = viewModel.state,
         onAction = { action ->
             when(action) {
-                ScanResultAction.OnBackIconClick -> onBackClick()
+                PreviewAction.OnBackIconClick -> onBackClick()
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -100,17 +100,17 @@ fun ScanResultScreenRoot(
 
 @Composable
 fun ScanResultScreen(
-    state: ScanResultState,
-    onAction: (ScanResultAction) -> Unit
+    state: PreviewState,
+    onAction: (PreviewAction) -> Unit
 ) {
     val context = LocalContext.current
     Scaffold(
         topBar = {
             QRCraftToolbar(
-                title = stringResource(R.string.scan_result),
+                title = state.toolbarTitle,
                 showBackButton = true,
                 onBackClick = {
-                    onAction(ScanResultAction.OnBackIconClick)
+                    onAction(PreviewAction.OnBackIconClick)
                 }
             )
         }
@@ -211,7 +211,7 @@ fun ScanResultScreen(
                             text = stringResource(R.string.share),
                             icon = ShareIcon,
                             onClick = {
-                                onAction(ScanResultAction.OnShareButtonClick)
+                                onAction(PreviewAction.OnShareButtonClick)
                             },
                             modifier = Modifier
                                 .weight(1f)
@@ -220,7 +220,7 @@ fun ScanResultScreen(
                             text = stringResource(R.string.copy),
                             icon = CopyIcon,
                             onClick = {
-                                onAction(ScanResultAction.OnCopyButtonClick)
+                                onAction(PreviewAction.OnCopyButtonClick)
                             },
                             modifier = Modifier
                                 .weight(1f)
@@ -238,7 +238,7 @@ fun ScanResultScreen(
 private fun ScanResultScreenPreview() {
     QRCraftTheme {
         ScanResultScreen(
-            state = ScanResultState(
+            state = PreviewState(
                 contentTypeId = QrType.TEXT,
                 contentValue = "hello world\n wwwwertyqwertyqwerty",
 //                contentValue = "Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum justo metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium. Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium."

@@ -28,13 +28,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun DataEntryScreenRoot(
     onBackClick: () -> Unit,
-    onNavigateToScanResult: (ScanResultDetail) -> Unit,
+    onNavigateToPreviewScreen: (ScanResultDetail) -> Unit,
     viewModel: DataEntryViewModel = koinViewModel(),
 ) {
     ObserveAsEvents(flow = viewModel.events) { event ->
         when(event) {
             is DataEntryEvent.QrCodeGenerated -> {
-                onNavigateToScanResult(event.scanResultDetail)
+                onNavigateToPreviewScreen(event.scanResultDetail)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr.presentation.scan_result
+package com.jvrcoding.qrcraft.qr.presentation.preview
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,16 +14,18 @@ import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 import com.jvrcoding.qrcraft.qr.presentation.util.toBitmap
 import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 
-class ScanResultViewModel(
+class PreviewViewModel(
     savedStateHandle: SavedStateHandle,
     qrCodeGenerator: QrCodeGenerator
 ): ViewModel() {
 
+    private val toolbarTitle: String = savedStateHandle["toolbarTitle"] ?:""
     private val qrValue: String = savedStateHandle["qrCodeValue"] ?: ""
     private val qrRawValue: String = savedStateHandle["qrCodeRawValue"] ?: ""
     private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
 
-    var state by mutableStateOf(ScanResultState(
+    var state by mutableStateOf(PreviewState(
+        toolbarTitle = toolbarTitle,
         qrImage = qrCodeGenerator.generate(qrRawValue, 500).toBitmap(),
         contentTypeId = qrType,
         contentType = qrType.toQrTypeText(),
@@ -31,19 +33,19 @@ class ScanResultViewModel(
     ))
         private set
 
-    private val eventChannel = Channel<ScanResultEvent>()
+    private val eventChannel = Channel<PreviewEvent>()
     val events = eventChannel.receiveAsFlow()
 
-    fun onAction(action: ScanResultAction) {
+    fun onAction(action: PreviewAction) {
         when(action) {
-            ScanResultAction.OnCopyButtonClick -> {
+            PreviewAction.OnCopyButtonClick -> {
                 viewModelScope.launch {
-                    eventChannel.send(ScanResultEvent.CopyText(qrValue))
+                    eventChannel.send(PreviewEvent.CopyText(qrValue))
                 }
             }
-            ScanResultAction.OnShareButtonClick -> {
+            PreviewAction.OnShareButtonClick -> {
                 viewModelScope.launch {
-                    eventChannel.send(ScanResultEvent.ShareData(qrValue))
+                    eventChannel.send(PreviewEvent.ShareData(qrValue))
                 }
             }
             else -> Unit

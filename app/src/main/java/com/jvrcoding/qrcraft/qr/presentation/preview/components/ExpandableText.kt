@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr.presentation.scan_result.components
+package com.jvrcoding.qrcraft.qr.presentation.preview.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable

@@ -57,7 +57,7 @@ fun CreateQrScreen(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp),
             contentPadding = PaddingValues(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)

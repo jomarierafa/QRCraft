@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.DataEntryScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.main.MainScreenRoot
-import com.jvrcoding.qrcraft.qr.presentation.scan_result.ScanResultScreenRoot
-import com.jvrcoding.qrcraft.qr.presentation.util.toScanResultRoute
+import com.jvrcoding.qrcraft.qr.presentation.preview.ScanResultScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.util.toPreviewScreenRoute
 
 @Composable
 fun NavigationRoot(
@@ -23,22 +23,26 @@ fun NavigationRoot(
                     navController.navigate(NavigationRoute.DataEntry(qrType))
                 },
                 onNavigateToScanResult = {  scanResultDetail ->
-                    navController.navigate(scanResultDetail.toScanResultRoute())
+                    navController.navigate(
+                        scanResultDetail.toPreviewScreenRoute("Scan Result")
+                    )
                 }
             )
         }
 
         composable<NavigationRoute.DataEntry> {
             DataEntryScreenRoot(
-                onNavigateToScanResult = {
-                    navController.navigate(it.toScanResultRoute())
+                onNavigateToPreviewScreen = { dataEntry ->
+                    navController.navigate(
+                        dataEntry.toPreviewScreenRoute("Preview")
+                    )
                 },
                 onBackClick = {
                     navController.navigateUp()
                 }
             )
         }
-        composable<NavigationRoute.ScanResult> {
+        composable<NavigationRoute.PreviewScreen> {
             ScanResultScreenRoot(
                 onBackClick = {
                     navController.navigateUp()
