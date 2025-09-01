@@ -8,7 +8,8 @@ private val LightColorScheme = lightColorScheme(
     primary = Primary,
     surface = Surface,
     surfaceContainerHigh = SurfaceHigher,
-    onSurface = OnSurface
+    onSurface = OnSurface,
+    outline = Outline
 )
 
 @Composable

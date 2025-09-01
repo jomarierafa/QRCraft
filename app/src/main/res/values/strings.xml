@@ -30,4 +30,7 @@
     <string name="password">Password</string>
     <string name="encryption_type">Encryption Type</string>
     <string name="preview">Preview</string>
+    <string name="scan_history">Scan History</string>
+    <string name="generated">Generated</string>
+    <string name="scanned">Scanned</string>
 </resources>

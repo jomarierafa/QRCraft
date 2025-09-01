@@ -45,6 +45,7 @@ import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.CreateQrScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.history.HistoryScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRSCannerScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
 import com.jvrcoding.qrcraft.qr.presentation.util.shouldShowCameraPermissionRationale
@@ -64,7 +65,9 @@ fun MainScreenRoot(
             MainEvent.NavigateToScanQr -> {
                 bottomNavController.navigate(NavigationRoute.QRScanner)
             }
-            MainEvent.NavigateToHistory -> {}
+            MainEvent.NavigateToHistory -> {
+                bottomNavController.navigate(NavigationRoute.History)
+            }
             MainEvent.NavigateToCreateQr -> {
                 bottomNavController.navigate(NavigationRoute.CreateQR)
             }
@@ -183,6 +186,9 @@ fun MainScreen(
                         onAction(MainAction.OnCreateQrItemClick(qrType))
                     }
                 )
+            }
+            composable<NavigationRoute.History> {
+                HistoryScreenRoot()
             }
         }
 

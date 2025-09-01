@@ -15,6 +15,9 @@ sealed interface NavigationRoute {
     data object CreateQR: NavigationRoute
 
     @Serializable
+    data object History: NavigationRoute
+
+    @Serializable
     data class DataEntry(
         val qrType: QrType
     ): NavigationRoute
