@@ -21,10 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.AddIcon
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.RefreshIcon
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ScanIcon
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
 import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 
 @Composable
@@ -51,7 +51,7 @@ fun QRBottomNavigation(
                 shape = CircleShape,
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = if(selectedItemId == BottomNavItem.HISTORY)
-                        LinkBG
+                        MaterialTheme.colorScheme.linkBG
                     else
                         Color.Transparent,
                 )
@@ -71,7 +71,7 @@ fun QRBottomNavigation(
                 shape = CircleShape,
                 colors = IconButtonDefaults.filledIconButtonColors(
                     containerColor = if(selectedItemId == BottomNavItem.CREATE_QR)
-                        LinkBG
+                        MaterialTheme.colorScheme.linkBG
                     else
                         Color.Transparent,
                 ),

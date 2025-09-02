@@ -25,3 +25,7 @@ val RefreshIcon: ImageVector
 val AddIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_plus_circle)
+
+val TrashIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_trash)

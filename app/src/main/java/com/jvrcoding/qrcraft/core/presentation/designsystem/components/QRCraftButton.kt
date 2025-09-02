@@ -18,9 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceDisabled
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ShareIcon
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceDisabled
 
 
 @Composable
@@ -39,7 +38,7 @@ fun QRCraftButton(
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = MaterialTheme.colorScheme.onSurface,
             containerColor = containerColor,
-            disabledContentColor = OnSurfaceDisabled,
+            disabledContentColor = MaterialTheme.colorScheme.onSurfaceDisabled,
             disabledContainerColor = MaterialTheme.colorScheme.surface
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),

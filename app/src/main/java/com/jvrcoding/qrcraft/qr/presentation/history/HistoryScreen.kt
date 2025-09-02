@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceAlt
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceAlt
 import com.jvrcoding.qrcraft.qr.presentation.history.model.Tab
 import org.koin.androidx.compose.koinViewModel
 
@@ -107,7 +107,7 @@ fun HistoryScreen(
                     selected = state.activeTab == Tab.SCANNED,
                     onClick = { onAction(HistoryAction.ChangeTab(Tab.SCANNED)) },
                     selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = OnSurfaceAlt,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceAlt,
                     text = {
                         Text(
                             text = stringResource(R.string.scanned),
@@ -119,7 +119,7 @@ fun HistoryScreen(
                     modifier = Modifier.padding(end = 16.dp),
                     selected = state.activeTab == Tab.GENERATED,
                     selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = OnSurfaceAlt,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceAlt,
                     onClick = { onAction(HistoryAction.ChangeTab(Tab.GENERATED)) },
                     text = {
                         Text(

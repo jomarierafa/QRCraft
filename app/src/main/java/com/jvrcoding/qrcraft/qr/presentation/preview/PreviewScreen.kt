@@ -53,8 +53,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
 
 @Composable
 fun PreviewScreenRoot(
@@ -186,7 +186,7 @@ fun PreviewScreen(
                                         )
                                         context.startActivity(intent)
                                     }
-                                    .background(LinkBG)
+                                    .background(MaterialTheme.colorScheme.linkBG)
                             )
                         }
 
