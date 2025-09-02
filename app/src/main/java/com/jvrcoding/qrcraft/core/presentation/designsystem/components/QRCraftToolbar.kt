@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnOverlay
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onOverlay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +25,7 @@ fun QRCraftToolbar(
     showBackButton:  Boolean,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    textColor: Color = OnOverlay,
+    textColor: Color = MaterialTheme.colorScheme.onOverlay,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,

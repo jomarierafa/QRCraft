@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceAlt
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceDisabled
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceAlt
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceDisabled
 
 @Composable
 fun ExpandableText(
@@ -45,7 +45,11 @@ fun ExpandableText(
         if (isOverflowing || isExpanded) {
             Text(
                 text = if (isExpanded) "Show less" else "Show more",
-                color = if (isExpanded) OnSurfaceDisabled else OnSurfaceAlt,
+                color = if (isExpanded) {
+                    MaterialTheme.colorScheme.onSurfaceDisabled
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceAlt
+                },
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .padding(top = 4.dp)

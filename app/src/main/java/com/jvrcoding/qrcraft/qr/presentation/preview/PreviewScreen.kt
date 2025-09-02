@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
 
 @Composable
@@ -186,7 +186,7 @@ fun ScanResultScreen(
                                         )
                                         context.startActivity(intent)
                                     }
-                                    .background(LinkBG)
+                                    .background(MaterialTheme.colorScheme.linkBG)
                             )
                         }
 

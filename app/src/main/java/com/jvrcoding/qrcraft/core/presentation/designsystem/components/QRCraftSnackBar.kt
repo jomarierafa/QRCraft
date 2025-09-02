@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Success
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.success
 import com.jvrcoding.qrcraft.qr.presentation.main.components.QRBottomNavigation
 import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 
@@ -44,7 +44,7 @@ fun QRCraftSnackBar(
     ) {
         Row(
             modifier = Modifier
-                .background(color = Success)
+                .background(color = MaterialTheme.colorScheme.success)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)

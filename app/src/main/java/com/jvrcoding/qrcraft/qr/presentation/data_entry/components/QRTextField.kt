@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceAlt
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceAlt
 
 @Composable
 fun QRTextField(
@@ -63,7 +63,7 @@ fun QRTextField(
                 if(state.text.isEmpty() && !isFocused) {
                     Text(
                         text = hint,
-                        color = OnSurfaceAlt,
+                        color = MaterialTheme.colorScheme.onSurfaceAlt,
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.fillMaxWidth()
                     )

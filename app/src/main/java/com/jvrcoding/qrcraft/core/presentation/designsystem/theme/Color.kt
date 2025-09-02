@@ -1,14 +1,7 @@
 package com.jvrcoding.qrcraft.core.presentation.designsystem.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
-
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
 
 val Primary = Color(0xFFEBFF69)
 val Surface = Color(0xFFEDF2F5)
@@ -33,3 +26,21 @@ val Phone = Color(0xFFC86017)
 val PhoneBG = Color(0xFFC86017).copy(alpha = 0.1f)
 val Wifi = Color(0xFF1F44CD)
 val WifiBG = Color(0xFF1F44CD).copy(alpha = 0.1f)
+
+val ColorScheme.onSurfaceAlt: Color
+    get() = OnSurfaceAlt
+
+val ColorScheme.onSurfaceDisabled: Color
+    get() = OnSurfaceDisabled
+
+val ColorScheme.overlay: Color
+    get() = Overlay
+
+val ColorScheme.onOverlay: Color
+    get() = OnOverlay
+
+val ColorScheme.linkBG: Color
+    get() = LinkBG
+
+val ColorScheme.success: Color
+    get() = Success

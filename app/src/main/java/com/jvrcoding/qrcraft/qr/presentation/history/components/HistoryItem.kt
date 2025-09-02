@@ -18,10 +18,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceAlt
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnSurfaceDisabled
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Text
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceAlt
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceDisabled
 
 @Composable
 fun HistoryItem(
@@ -55,14 +55,14 @@ fun HistoryItem(
             Text(
                 text = content,
                 style = MaterialTheme.typography.bodyMedium,
-                color = OnSurfaceAlt,
+                color = MaterialTheme.colorScheme.onSurfaceAlt,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = dateTime,
                 style = MaterialTheme.typography.bodySmall,
-                color = OnSurfaceDisabled
+                color = MaterialTheme.colorScheme.onSurfaceDisabled
             )
         }
     }

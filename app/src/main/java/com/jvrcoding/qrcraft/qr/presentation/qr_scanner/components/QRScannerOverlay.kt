@@ -25,15 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.OnOverlay
-import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Overlay
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onOverlay
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.overlay
 
 @Composable
 fun QRScannerOverlay(
     isLoading: Boolean
 ) {
     val cornerPaintColor = MaterialTheme.colorScheme.primary
+    val bgColor = MaterialTheme.colorScheme.overlay
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val parentWidth = this.maxWidth
@@ -50,7 +51,7 @@ fun QRScannerOverlay(
             val boxRect = Rect(boxTopLeftGlobal, Size(boxSize, boxSize))
 
             // Screen background
-            drawRect(color = Overlay)
+            drawRect(color = bgColor)
 
             if(!isLoading) {
                 // Rounded transparent cutout
@@ -146,7 +147,7 @@ fun QRScannerOverlay(
             Text(
                 text = stringResource(R.string.point_your_camera_at_a_qr_code),
                 style = MaterialTheme.typography.titleSmall.copy(
-                    color = OnOverlay
+                    color = MaterialTheme.colorScheme.onOverlay
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -161,13 +162,13 @@ fun QRScannerOverlay(
             ) {
                 CircularProgressIndicator(
                     strokeWidth = 1.5.dp,
-                    color = OnOverlay
+                    color = MaterialTheme.colorScheme.onOverlay
                 )
 
                 Text(
                     text = stringResource(R.string.loading),
                     style = MaterialTheme.typography.bodyLarge.copy(
-                        color = OnOverlay
+                        color = MaterialTheme.colorScheme.onOverlay
                     ),
                     textAlign = TextAlign.Center,
                     modifier = Modifier
