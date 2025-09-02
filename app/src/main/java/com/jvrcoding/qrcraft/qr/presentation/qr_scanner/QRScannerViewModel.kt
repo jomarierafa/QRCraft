@@ -41,7 +41,7 @@ class QRScannerViewModel(
 
                 delay(500)
                 eventChannel.send(
-                    QRScannerEvent.ScanResult(scanResultDetail = result)
+                    QRScannerEvent.SuccessfulScan(qrDetail = result)
                 )
 
                 delay(500)

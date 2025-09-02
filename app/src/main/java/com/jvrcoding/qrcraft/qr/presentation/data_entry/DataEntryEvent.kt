@@ -1,9 +1,9 @@
 package com.jvrcoding.qrcraft.qr.presentation.data_entry
 
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 
 sealed interface DataEntryEvent {
     data class QrCodeGenerated(
-        val scanResultDetail: ScanResultDetail
+        val qrDetail: QrDetail
     ): DataEntryEvent
 }

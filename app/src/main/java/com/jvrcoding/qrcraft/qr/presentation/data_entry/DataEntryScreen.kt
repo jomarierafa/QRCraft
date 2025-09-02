@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRContactDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRGeoDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRLinkDataForm
@@ -28,13 +28,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun DataEntryScreenRoot(
     onBackClick: () -> Unit,
-    onNavigateToPreviewScreen: (ScanResultDetail) -> Unit,
+    onNavigateToPreviewScreen: (QrDetail) -> Unit,
     viewModel: DataEntryViewModel = koinViewModel(),
 ) {
     ObserveAsEvents(flow = viewModel.events) { event ->
         when(event) {
             is DataEntryEvent.QrCodeGenerated -> {
-                onNavigateToPreviewScreen(event.scanResultDetail)
+                onNavigateToPreviewScreen(event.qrDetail)
             }
         }
     }

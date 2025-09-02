@@ -18,7 +18,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftTo
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.DeviceLayoutType
 import com.jvrcoding.qrcraft.core.presentation.util.rememberDeviceLayoutType
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.components.GridItem
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.model.menuItems
 

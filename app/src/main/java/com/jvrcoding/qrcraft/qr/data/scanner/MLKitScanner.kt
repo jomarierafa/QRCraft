@@ -8,11 +8,12 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import java.time.ZonedDateTime
 import kotlin.math.min
 
 @ExperimentalCoroutinesApi
@@ -25,7 +26,7 @@ class MLKitScanner() : QrScanner {
     )
 
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
-    override suspend fun scan(imageProxy: ImageProxy): ScanResultDetail? {
+    override suspend fun scan(imageProxy: ImageProxy): QrDetail? {
 
         val mediaImage = imageProxy.image ?: run {
             imageProxy.close()
@@ -67,10 +68,12 @@ class MLKitScanner() : QrScanner {
                         val format = getQrFormat(it.valueType)
                         Log.d("QrScannerRepository", "scan: $format")
                         cont.resume(
-                            ScanResultDetail(
-                                qrValue,
-                                it.rawValue ?: "",
-                                format
+                            QrDetail(
+                                id = "",
+                                qrValue = qrValue,
+                                qrRawValue = it.rawValue ?: "",
+                                qrType = format,
+                                createdAt = ZonedDateTime.now()
                             ),
                             null
                         )

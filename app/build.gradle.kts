@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -31,6 +32,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -67,6 +70,14 @@ dependencies {
     // scanner
     implementation(libs.google.mlkit.barcode.scanning)
     implementation(libs.google.zxing)
+
+    //room
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
+
+    //date time api
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
 
     implementation(libs.bundles.cameraX)
     implementation(libs.bundles.koin)

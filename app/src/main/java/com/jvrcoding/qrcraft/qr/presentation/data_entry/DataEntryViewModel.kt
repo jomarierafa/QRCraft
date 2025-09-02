@@ -7,8 +7,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.core.presentation.util.textAsFlow
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 
 class DataEntryViewModel(
     savedStateHandle: SavedStateHandle
@@ -98,10 +99,12 @@ class DataEntryViewModel(
     private fun generateQr() {
         viewModelScope.launch {
             eventChannel.send(DataEntryEvent.QrCodeGenerated(
-                scanResultDetail = ScanResultDetail(
+                qrDetail = QrDetail(
+                    id = "",
                     qrValue = displayText(),
                     qrRawValue = rawValue(),
-                    qrType = qrType
+                    qrType = qrType,
+                    createdAt = ZonedDateTime.now()
                 )
             ))
         }

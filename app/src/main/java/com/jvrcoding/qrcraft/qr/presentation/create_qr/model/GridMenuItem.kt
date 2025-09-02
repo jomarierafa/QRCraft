@@ -10,7 +10,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Phone
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Text
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Wifi
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 
 sealed class GridMenuItem(
     val label: UiText,

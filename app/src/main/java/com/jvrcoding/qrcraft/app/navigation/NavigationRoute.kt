@@ -1,6 +1,6 @@
 package com.jvrcoding.qrcraft.app.navigation
 
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import kotlinx.serialization.Serializable
 
 sealed interface NavigationRoute {

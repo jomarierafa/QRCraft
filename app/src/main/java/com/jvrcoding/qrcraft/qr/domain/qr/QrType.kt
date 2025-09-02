@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr.domain.scanner
+package com.jvrcoding.qrcraft.qr.domain.qr
 
 enum class QrType {
     TEXT,

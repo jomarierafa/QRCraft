@@ -10,7 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import com.jvrcoding.qrcraft.qr.domain.qr_generator.QrCodeGenerator
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.presentation.util.toBitmap
 import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 

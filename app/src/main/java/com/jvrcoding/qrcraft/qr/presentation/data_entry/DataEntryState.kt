@@ -3,7 +3,7 @@ package com.jvrcoding.qrcraft.qr.presentation.data_entry
 import androidx.compose.foundation.text.input.TextFieldState
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 
 data class DataEntryState(
     val toolbarText: UiText = UiText.StringResource(R.string.text),

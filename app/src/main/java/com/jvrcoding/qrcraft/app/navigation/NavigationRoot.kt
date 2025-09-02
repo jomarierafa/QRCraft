@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.DataEntryScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.main.MainScreenRoot
-import com.jvrcoding.qrcraft.qr.presentation.preview.ScanResultScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.preview.PreviewScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.util.toPreviewScreenRoute
 
 @Composable
@@ -22,9 +22,9 @@ fun NavigationRoot(
                 onCreateQrItemClicked = { qrType ->
                     navController.navigate(NavigationRoute.DataEntry(qrType))
                 },
-                onNavigateToScanResult = {  scanResultDetail ->
+                onNavigateToPreviewScreen = { qrDetail ->
                     navController.navigate(
-                        scanResultDetail.toPreviewScreenRoute("Scan Result")
+                        qrDetail.toPreviewScreenRoute("Scan Result")
                     )
                 }
             )
@@ -43,7 +43,7 @@ fun NavigationRoot(
             )
         }
         composable<NavigationRoute.PreviewScreen> {
-            ScanResultScreenRoot(
+            PreviewScreenRoot(
                 onBackClick = {
                     navController.navigateUp()
                 }

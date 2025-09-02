@@ -5,7 +5,7 @@ import android.graphics.Color
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
 import com.jvrcoding.qrcraft.qr.domain.qr_generator.QRCode
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 

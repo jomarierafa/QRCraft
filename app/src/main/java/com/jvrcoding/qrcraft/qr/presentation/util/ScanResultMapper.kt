@@ -1,10 +1,10 @@
 package com.jvrcoding.qrcraft.qr.presentation.util
 
 import com.jvrcoding.qrcraft.app.navigation.NavigationRoute
-import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import java.time.ZonedDateTime
 
-fun ScanResultDetail.toPreviewScreenRoute(toolbarTitle: String): NavigationRoute.PreviewScreen {
+fun QrDetail.toPreviewScreenRoute(toolbarTitle: String): NavigationRoute.PreviewScreen {
     return NavigationRoute.PreviewScreen(
         toolbarTitle = toolbarTitle,
         qrCodeValue = this.qrValue,
@@ -13,10 +13,12 @@ fun ScanResultDetail.toPreviewScreenRoute(toolbarTitle: String): NavigationRoute
     )
 }
 
-fun NavigationRoute.PreviewScreen.toScanResultDetail(): ScanResultDetail {
-    return ScanResultDetail(
+fun NavigationRoute.PreviewScreen.toQrDetail(): QrDetail {
+    return QrDetail(
+        id = "",
         qrValue = this.qrCodeValue,
         qrRawValue = this.qrCodeRawValue,
-        qrType = this.qrType
+        qrType = this.qrType,
+        createdAt = ZonedDateTime.now()
     )
 }

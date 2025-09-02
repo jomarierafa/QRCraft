@@ -3,7 +3,7 @@ package com.jvrcoding.qrcraft.qr.presentation.preview
 import android.graphics.Bitmap
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 
 data class PreviewState(
     val toolbarTitle: String = "",

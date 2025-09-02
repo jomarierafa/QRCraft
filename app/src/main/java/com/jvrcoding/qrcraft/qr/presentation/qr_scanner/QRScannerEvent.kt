@@ -1,11 +1,11 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 
 sealed interface QRScannerEvent {
     data class Error(val error: UiText): QRScannerEvent
-    data class ScanResult(
-        val scanResultDetail: ScanResultDetail
+    data class SuccessfulScan(
+        val qrDetail: QrDetail
     ): QRScannerEvent
 }

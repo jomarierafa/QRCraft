@@ -1,7 +1,7 @@
 package com.jvrcoding.qrcraft.qr.presentation.main
 
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
-import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResultDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 
 sealed interface MainAction {
@@ -12,5 +12,5 @@ sealed interface MainAction {
     ): MainAction
     data class OnBottomNavigationItemClick(val screenItem: BottomNavItem) : MainAction
     data class OnCreateQrItemClick(val qrType: QrType) : MainAction
-    data class OnNavigateToScanResult(val scanResultDetail: ScanResultDetail) : MainAction
+    data class OnNavigateToPreviewScreen(val qrDetail: QrDetail) : MainAction
 }

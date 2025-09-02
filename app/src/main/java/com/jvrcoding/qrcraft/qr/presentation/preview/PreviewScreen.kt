@@ -54,10 +54,10 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LinkBG
-import com.jvrcoding.qrcraft.qr.domain.scanner.QrType
+import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 
 @Composable
-fun ScanResultScreenRoot(
+fun PreviewScreenRoot(
     viewModel: PreviewViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
@@ -86,7 +86,7 @@ fun ScanResultScreenRoot(
         }
     }
 
-    ScanResultScreen(
+    PreviewScreen(
         state = viewModel.state,
         onAction = { action ->
             when(action) {
@@ -99,7 +99,7 @@ fun ScanResultScreenRoot(
 }
 
 @Composable
-fun ScanResultScreen(
+fun PreviewScreen(
     state: PreviewState,
     onAction: (PreviewAction) -> Unit
 ) {
@@ -235,9 +235,9 @@ fun ScanResultScreen(
 
 @Preview
 @Composable
-private fun ScanResultScreenPreview() {
+private fun PreviewScreenPreview() {
     QRCraftTheme {
-        ScanResultScreen(
+        PreviewScreen(
             state = PreviewState(
                 contentTypeId = QrType.TEXT,
                 contentValue = "hello world\n wwwwertyqwertyqwerty",
