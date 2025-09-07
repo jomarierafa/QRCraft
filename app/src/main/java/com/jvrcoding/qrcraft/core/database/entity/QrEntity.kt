@@ -1,4 +1,4 @@
-package com.jvrcoding.qrcraft.qr.data.database.entity
+package com.jvrcoding.qrcraft.core.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

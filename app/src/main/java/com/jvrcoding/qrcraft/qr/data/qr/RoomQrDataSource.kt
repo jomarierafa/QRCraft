@@ -1,18 +1,18 @@
-package com.jvrcoding.qrcraft.qr.data.database
+package com.jvrcoding.qrcraft.qr.data.qr
 
 import android.database.sqlite.SQLiteFullException
+import com.jvrcoding.qrcraft.core.database.dao.QrDao
+import com.jvrcoding.qrcraft.core.database.mappers.toQrDetail
+import com.jvrcoding.qrcraft.core.database.mappers.toQrEntity
 import com.jvrcoding.qrcraft.core.domain.DataError
 import com.jvrcoding.qrcraft.core.domain.Result
-import com.jvrcoding.qrcraft.qr.data.database.dao.QrDao
-import com.jvrcoding.qrcraft.qr.data.database.mappers.toQrDetail
-import com.jvrcoding.qrcraft.qr.data.database.mappers.toQrEntity
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
-import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RoomLocalQrDataSource(
+class RoomQrDataSource(
     private val qrDao: QrDao
 ): LocalQrDataSource {
     override suspend fun getQr(id: QrDetailId): QrDetail? {

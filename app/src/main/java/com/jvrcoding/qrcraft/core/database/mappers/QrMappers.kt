@@ -1,6 +1,6 @@
-package com.jvrcoding.qrcraft.qr.data.database.mappers
+package com.jvrcoding.qrcraft.core.database.mappers
 
-import com.jvrcoding.qrcraft.qr.data.database.entity.QrEntity
+import com.jvrcoding.qrcraft.core.database.entity.QrEntity
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import java.time.Instant
 import java.time.ZoneId
