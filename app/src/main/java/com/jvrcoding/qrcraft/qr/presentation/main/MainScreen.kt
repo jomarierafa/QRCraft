@@ -43,7 +43,7 @@ import com.jvrcoding.qrcraft.qr.presentation.main.components.QRBottomNavigation
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
-import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.CreateQrScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.history.HistoryScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRSCannerScreenRoot
@@ -55,7 +55,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainScreenRoot(
     onCreateQrItemClicked: (QrType) -> Unit,
-    onNavigateToPreviewScreen: (QrDetail) -> Unit,
+    onNavigateToPreviewScreen: (QrDetailId) -> Unit,
     viewModel: MainViewModel = koinViewModel(),
 ) {
     val bottomNavController = rememberNavController()
@@ -79,7 +79,7 @@ fun MainScreenRoot(
         onAction = { action ->
             when(action) {
                 is MainAction.OnCreateQrItemClick ->  onCreateQrItemClicked(action.qrType)
-                is MainAction.OnNavigateToPreviewScreen -> { onNavigateToPreviewScreen(action.qrDetail) }
+                is MainAction.OnNavigateToPreviewScreen -> { onNavigateToPreviewScreen(action.qrId) }
                 else -> Unit
             }
             viewModel.onAction(action)
@@ -174,8 +174,8 @@ fun MainScreen(
             composable<NavigationRoute.QRScanner> {
                 if(state.hasCameraPermission) {
                     QRSCannerScreenRoot(
-                        onNavigateToPreviewScreen = { qrDetail ->
-                            onAction(MainAction.OnNavigateToPreviewScreen(qrDetail))
+                        onNavigateToPreviewScreen = { qrId ->
+                            onAction(MainAction.OnNavigateToPreviewScreen(qrId))
                         },
                     )
                 }

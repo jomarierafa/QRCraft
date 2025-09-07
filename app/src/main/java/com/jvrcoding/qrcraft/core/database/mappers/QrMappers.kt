@@ -4,7 +4,6 @@ import com.jvrcoding.qrcraft.core.database.entity.QrEntity
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import java.time.Instant
 import java.time.ZoneId
-import java.util.UUID
 
 fun QrEntity.toQrDetail(): QrDetail {
     return QrDetail(
@@ -12,6 +11,7 @@ fun QrEntity.toQrDetail(): QrDetail {
         qrValue = qrValue,
         qrRawValue = qrRawValue,
         qrType = qrType,
+        transactionType = transactionType,
         createdAt = Instant.parse(createdAt)
             .atZone(ZoneId.of("UTC"))
     )
@@ -19,10 +19,11 @@ fun QrEntity.toQrDetail(): QrDetail {
 
 fun QrDetail.toQrEntity(): QrEntity {
     return QrEntity(
-        id = id ?: UUID.randomUUID().toString(),
+        id = id,
         qrValue = qrValue,
         qrRawValue = qrRawValue,
         qrType = qrType,
+        transactionType = transactionType,
         createdAt = createdAt.toInstant().toString()
     )
 }

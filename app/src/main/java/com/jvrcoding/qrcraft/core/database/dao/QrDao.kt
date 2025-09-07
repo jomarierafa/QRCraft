@@ -12,9 +12,6 @@ interface QrDao {
     @Upsert
     suspend fun upsertQr(note: QrEntity)
 
-    @Upsert
-    suspend fun upsertQrList(notes: List<QrEntity>)
-
     @Query("SELECT * FROM qrentity WHERE id = :id")
     suspend fun getQr(id: String): QrEntity
 

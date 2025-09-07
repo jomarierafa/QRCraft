@@ -25,9 +25,7 @@ sealed interface NavigationRoute {
     @Serializable
     data class PreviewScreen(
         val toolbarTitle: String,
-        val qrCodeValue: String,
-        val qrCodeRawValue: String,
-        val qrType: QrType
+        val qrId: String,
     ): NavigationRoute
 
 }

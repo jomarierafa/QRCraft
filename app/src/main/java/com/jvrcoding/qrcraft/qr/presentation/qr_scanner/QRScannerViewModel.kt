@@ -7,14 +7,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import java.util.UUID
 
 class QRScannerViewModel(
-    private val qrScanner: QrScanner
+    private val qrScanner: QrScanner,
+    private val qrDataSource: LocalQrDataSource
 ): ViewModel() {
 
     var state by mutableStateOf(QRScannerState())
@@ -39,9 +44,20 @@ class QRScannerViewModel(
                 imageAnalysis.clearAnalyzer()
                 state = state.copy(isQRProcessing = true)
 
+                val qrId = UUID.randomUUID().toString()
+                val qrDetails = QrDetail(
+                    id =  qrId,
+                    qrValue = result.qrValue,
+                    qrRawValue = result.qrRawValue,
+                    qrType = result.qrType,
+                    transactionType = result.transactionType,
+                    createdAt = ZonedDateTime.now()
+                )
+                qrDataSource.upsertQr(qr = qrDetails)
+
                 delay(500)
                 eventChannel.send(
-                    QRScannerEvent.SuccessfulScan(qrDetail = result)
+                    QRScannerEvent.SuccessfulScan(qrId = qrId)
                 )
 
                 delay(500)

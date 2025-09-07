@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
-import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.CameraPreview
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
 import org.koin.androidx.compose.koinViewModel
@@ -17,7 +17,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun QRSCannerScreenRoot(
-    onNavigateToPreviewScreen: (QrDetail) -> Unit,
+    onNavigateToPreviewScreen: (QrDetailId) -> Unit,
     viewModel: QRScannerViewModel = koinViewModel(),
 ){
 
@@ -33,7 +33,7 @@ fun QRSCannerScreenRoot(
             }
 
             is QRScannerEvent.SuccessfulScan -> {
-                onNavigateToPreviewScreen(event.qrDetail)
+                onNavigateToPreviewScreen(event.qrId)
             }
         }
     }

@@ -1,11 +1,8 @@
 package com.jvrcoding.qrcraft.qr.data.qr
 
-import android.database.sqlite.SQLiteFullException
 import com.jvrcoding.qrcraft.core.database.dao.QrDao
 import com.jvrcoding.qrcraft.core.database.mappers.toQrDetail
 import com.jvrcoding.qrcraft.core.database.mappers.toQrEntity
-import com.jvrcoding.qrcraft.core.domain.DataError
-import com.jvrcoding.qrcraft.core.domain.Result
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
@@ -26,24 +23,10 @@ class RoomQrDataSource(
             }
     }
 
-    override suspend fun upsertQr(note: QrDetail): Result<QrDetailId, DataError.Local> {
-        return try {
-            val entity = note.toQrEntity()
-            qrDao.upsertQr(entity)
-            Result.Success(entity.id)
-        } catch (e: SQLiteFullException) {
-            Result.Error(DataError.Local.DISK_FULL)
-        }
-    }
-
-    override suspend fun upsertQrList(notes: List<QrDetail>): Result<List<QrDetailId>, DataError.Local> {
-        return try {
-            val entities = notes.map { it.toQrEntity() }
-            qrDao.upsertQrList(entities)
-            Result.Success(entities.map { it.id })
-        } catch (e: SQLiteFullException) {
-            Result.Error(DataError.Local.DISK_FULL)
-        }
+    override suspend fun upsertQr(qr: QrDetail): QrDetailId {
+        val entity = qr.toQrEntity()
+        qrDao.upsertQr(entity)
+        return entity.id
     }
 
     override suspend fun deleteQr(id: QrDetailId) {

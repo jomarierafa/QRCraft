@@ -7,8 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.core.presentation.util.textAsFlow
+import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
 import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
@@ -17,9 +19,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.util.UUID
 
 class DataEntryViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val qrDataSource: LocalQrDataSource
 ): ViewModel() {
 
     private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
@@ -32,6 +36,8 @@ class DataEntryViewModel(
 
     private val eventChannel = Channel<DataEntryEvent>()
     val events = eventChannel.receiveAsFlow()
+
+    private val qrId: String = UUID.randomUUID().toString()
 
     init {
         state.text.textAsFlow()
@@ -98,15 +104,16 @@ class DataEntryViewModel(
 
     private fun generateQr() {
         viewModelScope.launch {
-            eventChannel.send(DataEntryEvent.QrCodeGenerated(
-                qrDetail = QrDetail(
-                    id = "",
-                    qrValue = displayText(),
-                    qrRawValue = rawValue(),
-                    qrType = qrType,
-                    createdAt = ZonedDateTime.now()
-                )
-            ))
+            val qrDetail = QrDetail(
+                id = qrId,
+                qrValue = displayText(),
+                qrRawValue = rawValue(),
+                qrType = qrType,
+                transactionType = Transaction.GENERATED,
+                createdAt = ZonedDateTime.now()
+            )
+            qrDataSource.upsertQr(qr = qrDetail)
+            eventChannel.send(DataEntryEvent.QrCodeGenerated(qrId = qrId))
         }
     }
 

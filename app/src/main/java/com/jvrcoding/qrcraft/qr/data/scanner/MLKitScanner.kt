@@ -11,6 +11,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.time.ZonedDateTime
@@ -73,6 +74,7 @@ class MLKitScanner() : QrScanner {
                                 qrValue = qrValue,
                                 qrRawValue = it.rawValue ?: "",
                                 qrType = format,
+                                transactionType = Transaction.SCANNED,
                                 createdAt = ZonedDateTime.now()
                             ),
                             null
