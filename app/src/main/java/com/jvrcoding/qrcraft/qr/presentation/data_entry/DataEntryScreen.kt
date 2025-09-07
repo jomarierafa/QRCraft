@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRContactDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRGeoDataForm
@@ -23,6 +22,7 @@ import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRLinkDataFor
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRPhoneDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRTextDataForm
 import com.jvrcoding.qrcraft.qr.presentation.data_entry.components.QRWifiDataForm
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,7 +58,7 @@ fun DataScreen(
     Scaffold(
         topBar = {
             QRCraftToolbar(
-                title = state.toolbarText.asString(),
+                title = state.qrType.title.asString(),
                 showBackButton = true,
                 textColor = MaterialTheme.colorScheme.onSurface,
                 onBackClick = { onAction(DataEntryAction.OnBackClick)}
@@ -75,37 +75,37 @@ fun DataScreen(
         ) {
 
             when(state.qrType) {
-                QrType.TEXT -> QRTextDataForm(
+                QrTypeUi.TEXT -> QRTextDataForm(
                     text = state.text,
                     buttonEnable = state.canGenerateTextQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }
                 )
-                QrType.LINK -> QRLinkDataForm(
+                QrTypeUi.LINK -> QRLinkDataForm(
                     link = state.link,
                     buttonEnable = state.canGenerateLinkQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }
                 )
-                QrType.GEOLOCATION -> QRGeoDataForm(
+                QrTypeUi.GEOLOCATION -> QRGeoDataForm(
                     latitude = state.latitude,
                     longitude = state.longitude,
                     buttonEnable = state.canGenerateGeoQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }
                 )
-                QrType.WIFI -> QRWifiDataForm(
+                QrTypeUi.WIFI -> QRWifiDataForm(
                     ssid = state.wifiSsid,
                     password = state.wifiPassword,
                     encryption = state.wifiEncryption,
                     buttonEnable = state.canGenerateWifiQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }
                 )
-                QrType.CONTACT -> QRContactDataForm(
+                QrTypeUi.CONTACT -> QRContactDataForm(
                     name = state.name,
                     email = state.email,
                     phoneNumber = state.phoneNumber,
                     buttonEnable = state.canGenerateContactQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }
                 )
-                QrType.PHONE -> QRPhoneDataForm(
+                QrTypeUi.PHONE -> QRPhoneDataForm(
                     phoneNumber = state.phoneNumber,
                     buttonEnable = state.canGeneratePhoneQr,
                     onButtonClick = { onAction(DataEntryAction.OnGenerateButtonClick) }

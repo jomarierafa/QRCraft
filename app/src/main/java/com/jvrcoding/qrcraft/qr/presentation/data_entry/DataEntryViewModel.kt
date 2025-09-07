@@ -11,7 +11,7 @@ import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
-import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -26,11 +26,10 @@ class DataEntryViewModel(
     private val qrDataSource: LocalQrDataSource
 ): ViewModel() {
 
-    private val qrType: QrType = savedStateHandle["qrType"] ?: QrType.TEXT
+    private val qrType: QrTypeUi = savedStateHandle["qrType"] ?: QrTypeUi.TEXT
 
     var state by mutableStateOf(DataEntryState(
-        qrType = qrType,
-        toolbarText = qrType.toQrTypeText()
+        qrType = QrTypeUi.valueOf(qrType.name)
     ))
         private set
 
@@ -108,7 +107,7 @@ class DataEntryViewModel(
                 id = qrId,
                 qrValue = displayText(),
                 qrRawValue = rawValue(),
-                qrType = qrType,
+                qrType = QrType.valueOf(qrType.name),
                 transactionType = Transaction.GENERATED,
                 createdAt = ZonedDateTime.now()
             )
@@ -118,12 +117,12 @@ class DataEntryViewModel(
     }
 
     private fun rawValue(): String {
-        return  when(qrType) {
-            QrType.TEXT -> state.text.text.toString()
-            QrType.LINK -> state.link.text.toString()
-            QrType.GEOLOCATION -> "geo:${state.latitude.text},${state.longitude.text}"
-            QrType.WIFI -> "WIFI:S${state.wifiSsid.text};T:${state.wifiEncryption.text};P:${state.wifiPassword.text};;"
-            QrType.CONTACT -> """
+        return when(qrType) {
+            QrTypeUi.TEXT -> state.text.text.toString()
+            QrTypeUi.LINK -> state.link.text.toString()
+            QrTypeUi.GEOLOCATION -> "geo:${state.latitude.text},${state.longitude.text}"
+            QrTypeUi.WIFI -> "WIFI:S${state.wifiSsid.text};T:${state.wifiEncryption.text};P:${state.wifiPassword.text};;"
+            QrTypeUi.CONTACT -> """
                             BEGIN:VCARD
                             VERSION:3.0
                             N:${state.name.text}
@@ -131,22 +130,22 @@ class DataEntryViewModel(
                             EMAIL:${state.email.text}
                             END:VCARD
                             """.trimIndent()
-            QrType.PHONE -> "tel:${state.phoneNumber.text}"
+            QrTypeUi.PHONE -> "tel:${state.phoneNumber.text}"
         }
     }
 
     private fun displayText(): String {
         return when(qrType) {
-            QrType.TEXT -> "${state.text.text}"
-            QrType.LINK -> "${state.link.text}"
-            QrType.GEOLOCATION -> "${state.latitude.text}, ${state.longitude.text}"
-            QrType.WIFI -> "SSID: ${state.wifiSsid.text}\n" +
+            QrTypeUi.TEXT -> "${state.text.text}"
+            QrTypeUi.LINK -> "${state.link.text}"
+            QrTypeUi.GEOLOCATION -> "${state.latitude.text}, ${state.longitude.text}"
+            QrTypeUi.WIFI -> "SSID: ${state.wifiSsid.text}\n" +
                     "Password: ${state.wifiPassword.text}\n" +
                     "Encryption type: ${state.wifiEncryption.text}"
-            QrType.CONTACT -> "${state.name.text}\n" +
+            QrTypeUi.CONTACT -> "${state.name.text}\n" +
                     "${state.email.text}\n" +
                     "${state.phoneNumber.text}"
-            QrType.PHONE -> "${state.phoneNumber.text}"
+            QrTypeUi.PHONE -> "${state.phoneNumber.text}"
         }
     }
 

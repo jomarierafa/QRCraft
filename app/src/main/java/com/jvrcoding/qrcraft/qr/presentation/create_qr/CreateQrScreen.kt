@@ -18,14 +18,13 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftTo
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.DeviceLayoutType
 import com.jvrcoding.qrcraft.core.presentation.util.rememberDeviceLayoutType
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.components.GridItem
-import com.jvrcoding.qrcraft.qr.presentation.create_qr.model.menuItems
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 
 
 @Composable
 fun CreateQrScreenRoot(
-    onItemClick: (QrType) -> Unit,
+    onItemClick: (QrTypeUi) -> Unit,
 ) {
     CreateQrScreen(
         onAction = { action ->
@@ -63,13 +62,13 @@ fun CreateQrScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            items(menuItems) { item ->
+            items(QrTypeUi.entries.toList()) { item ->
                 GridItem(
-                    text = item.label.asString(),
-                    iconRes = item.iconRes,
+                    text = item.title.asString(),
+                    iconRes = item.icon,
                     tint = item.iconColor,
                     onClick = {
-                        onAction(CreateQrAction.OnItemClicked(item.qrType))
+                        onAction(CreateQrAction.OnItemClicked(item))
                     }
                 )
             }

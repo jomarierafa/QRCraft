@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -144,9 +143,9 @@ fun HistoryScreen(
             ) {
                 items(state.qrList) { item ->
                     HistoryItem(
-                        iconRes = R.drawable.ic_wifi,
-                        iconTint = Color.Red,
-                        title = item.title.asString(),
+                        iconRes = item.qrType.icon,
+                        iconTint = item.qrType.iconColor,
+                        title = item.qrType.title.asString(),
                         content = item.content,
                         dateTime = item.date,
                         modifier = Modifier

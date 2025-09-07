@@ -1,6 +1,6 @@
 package com.jvrcoding.qrcraft.app.navigation
 
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import kotlinx.serialization.Serializable
 
 sealed interface NavigationRoute {
@@ -19,7 +19,7 @@ sealed interface NavigationRoute {
 
     @Serializable
     data class DataEntry(
-        val qrType: QrType
+        val qrType: QrTypeUi
     ): NavigationRoute
 
     @Serializable

@@ -11,8 +11,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import com.jvrcoding.qrcraft.qr.domain.qr_generator.QrCodeGenerator
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.util.toBitmap
-import com.jvrcoding.qrcraft.qr.presentation.util.toQrTypeText
 
 class PreviewViewModel(
     savedStateHandle: SavedStateHandle,
@@ -57,8 +57,7 @@ class PreviewViewModel(
             val qrImage = qrCodeGenerator.generate(qrDetails.qrRawValue, 500)
             state = state.copy(
                 qrImage = qrImage.toBitmap(),
-                contentTypeId = qrDetails.qrType,
-                contentType = qrDetails.qrType.toQrTypeText(),
+                qrType = QrTypeUi.valueOf(qrDetails.qrType.name),
                 contentValue = qrDetails.qrValue
             )
         }

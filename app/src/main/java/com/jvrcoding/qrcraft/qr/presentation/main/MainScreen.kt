@@ -42,10 +42,10 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftSn
 import com.jvrcoding.qrcraft.qr.presentation.main.components.QRBottomNavigation
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.CreateQrScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.history.HistoryScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRSCannerScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
 import com.jvrcoding.qrcraft.qr.presentation.util.shouldShowCameraPermissionRationale
@@ -54,7 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreenRoot(
-    onCreateQrItemClicked: (QrType) -> Unit,
+    onCreateQrItemClicked: (QrTypeUi) -> Unit,
     onNavigateToPreviewScreen: (QrDetailId) -> Unit,
     viewModel: MainViewModel = koinViewModel(),
 ) {

@@ -53,8 +53,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 
 @Composable
 fun PreviewScreenRoot(
@@ -159,20 +159,20 @@ fun PreviewScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(
-                        text = state.contentType.asString(),
+                        text = state.qrType.title.asString(),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
-                    when (state.contentTypeId) {
-                        QrType.TEXT -> {
+                    when (state.qrType) {
+                        QrTypeUi.TEXT -> {
                             ExpandableText(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = state.contentValue
                             )
                         }
 
-                        QrType.LINK -> {
+                        QrTypeUi.LINK -> {
                             Text(
                                 text = state.contentValue,
                                 style = MaterialTheme.typography.labelLarge,
@@ -239,7 +239,7 @@ private fun PreviewScreenPreview() {
     QRCraftTheme {
         PreviewScreen(
             state = PreviewState(
-                contentTypeId = QrType.TEXT,
+                qrType = QrTypeUi.TEXT,
                 contentValue = "hello world\n wwwwertyqwertyqwerty",
 //                contentValue = "Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum justo metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium. Adipiscing ipsum lacinia tincidunt sed. In risus dui accumsan accumsan quam morbi nulla. Dictum metus auctor nunc quam id sed. Urna nisi gravida sed lobortis diam pretium."
             ),

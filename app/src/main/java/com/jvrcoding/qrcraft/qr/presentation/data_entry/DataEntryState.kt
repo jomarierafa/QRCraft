@@ -1,13 +1,10 @@
 package com.jvrcoding.qrcraft.qr.presentation.data_entry
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.util.UiText
-import com.jvrcoding.qrcraft.qr.domain.qr.QrType
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 
 data class DataEntryState(
-    val toolbarText: UiText = UiText.StringResource(R.string.text),
-    val qrType: QrType = QrType.TEXT,
+    val qrType: QrTypeUi = QrTypeUi.TEXT,
 
     val text: TextFieldState = TextFieldState(),
     val canGenerateTextQr: Boolean = false,
