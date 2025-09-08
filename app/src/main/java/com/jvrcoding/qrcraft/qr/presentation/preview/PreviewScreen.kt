@@ -54,6 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
+import com.jvrcoding.qrcraft.core.presentation.util.shareText
 import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 
 @Composable
@@ -75,13 +76,7 @@ fun PreviewScreenRoot(
                 }
             }
             is PreviewEvent.ShareData -> {
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, event.data)
-                    type = "text/plain"
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null)
-                context.startActivity(shareIntent)
+                context.shareText(event.data)
             }
         }
     }

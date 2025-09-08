@@ -2,9 +2,11 @@ package com.jvrcoding.qrcraft.qr.presentation.history
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,18 +36,33 @@ import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QRCraftToolbar
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onSurfaceAlt
+import com.jvrcoding.qrcraft.core.presentation.util.fadingEdge
+import com.jvrcoding.qrcraft.core.presentation.util.shareText
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItem
+import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItemMenu
 import com.jvrcoding.qrcraft.qr.presentation.history.model.Tab
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HistoryScreenRoot(
+    onNavigateToPreviewScren: (QrDetailId) -> Unit,
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
 
+    val context = LocalContext.current
     HistoryScreen(
         state = viewModel.state,
         onAction = { action ->
+            when(action) {
+                is HistoryAction.OnShareClick -> {
+                    context.shareText(action.qrContent)
+                }
+                is HistoryAction.OnItemClick -> {
+                    onNavigateToPreviewScren(action.qrId)
+                }
+                else -> Unit
+            }
             viewModel.onAction(action)
         }
     )
@@ -52,7 +72,7 @@ fun HistoryScreenRoot(
 @Composable
 fun HistoryScreen(
     state: HistoryState,
-    onAction: (HistoryAction) -> Unit,
+    onAction: (HistoryAction) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -136,12 +156,18 @@ fun HistoryScreen(
             }
 
             LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fadingEdge(fadeHeight = 500f),
                 contentPadding = PaddingValues(
                     horizontal = 16.dp,
                     vertical = 8.dp
-                ),
+                )
             ) {
-                items(state.qrList) { item ->
+                items(
+                    items = state.qrList,
+                    key = { item -> item.id }
+                ) { item ->
                     HistoryItem(
                         iconRes = item.qrType.icon,
                         iconTint = item.qrType.iconColor,
@@ -149,10 +175,33 @@ fun HistoryScreen(
                         content = item.content,
                         dateTime = item.date,
                         modifier = Modifier
-                            .padding(vertical = 4.dp,)
+                            .padding(vertical = 4.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .combinedClickable(
+                                onClick = {
+                                    onAction(HistoryAction.OnItemClick(item.id))
+                                },
+                                onLongClick = {
+                                    onAction(HistoryAction.OnItemLongClick(item))
+                                }
+                            )
                     )
                 }
             }
+        }
+
+        if(state.selectedQr != null) {
+            HistoryItemMenu(
+                onShareClick = {
+                    onAction(HistoryAction.OnShareClick(state.selectedQr.content))
+                },
+                onDeleteClick = {
+                    onAction(HistoryAction.OnDeleteQrClick(state.selectedQr.id))
+                },
+                onDismiss = {
+                    onAction(HistoryAction.OnDismissItemMenu)
+                }
+            )
         }
     }
 

@@ -27,6 +27,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.TrashIcon
 @Composable
 fun HistoryItemMenu(
     onShareClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +62,7 @@ fun HistoryItemMenu(
             )
         }
         TextButton(
-            onClick = onShareClick,
+            onClick = onDeleteClick,
             shape = RectangleShape,
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.error,
@@ -89,6 +90,7 @@ private fun HistoryItemMenuPreview() {
     QRCraftTheme {
         HistoryItemMenu(
             onShareClick = {},
+            onDeleteClick = {},
             onDismiss = {}
         )
     }
