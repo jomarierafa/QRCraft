@@ -189,7 +189,7 @@ fun MainScreen(
             }
             composable<NavigationRoute.History> {
                 HistoryScreenRoot(
-                    onNavigateToPreviewScren = {
+                    onNavigateToPreviewScreen = {
                         onAction(MainAction.OnNavigateToPreviewScreen(it))
                     }
                 )

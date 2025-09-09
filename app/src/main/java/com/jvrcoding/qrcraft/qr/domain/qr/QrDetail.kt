@@ -4,6 +4,7 @@ import java.time.ZonedDateTime
 
 data class QrDetail(
     val id: String,
+    val qrTitleText: String = "",
     val qrValue: String,
     val qrRawValue: String,
     val qrType: QrType,

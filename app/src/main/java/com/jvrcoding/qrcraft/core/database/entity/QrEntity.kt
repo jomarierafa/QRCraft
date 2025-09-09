@@ -10,6 +10,7 @@ import java.util.UUID
 data class QrEntity(
     val qrValue: String,
     val qrRawValue: String,
+    val qrTitleText: String,
     val qrType: QrType,
     val transactionType: Transaction,
     val createdAt: String,

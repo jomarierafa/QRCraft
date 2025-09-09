@@ -56,6 +56,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Link
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.linkBG
 import com.jvrcoding.qrcraft.core.presentation.util.shareText
 import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
+import com.jvrcoding.qrcraft.qr.presentation.preview.components.TransparentTextField
 
 @Composable
 fun PreviewScreenRoot(
@@ -153,10 +154,11 @@ fun PreviewScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = state.qrType.title.asString(),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+
+                    TransparentTextField(
+                        text = state.title,
+                        hintText = state.qrType.title.asString(),
+                        onValueChange = { onAction(PreviewAction.OnTitleTextChange(it)) }
                     )
 
                     when (state.qrType) {

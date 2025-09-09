@@ -29,6 +29,13 @@ class RoomQrDataSource(
         return entity.id
     }
 
+    override suspend fun updateQrTitle(id: QrDetailId, text: String) {
+        qrDao.updateQrTitle(
+            id = id,
+            text = text
+        )
+    }
+
     override suspend fun deleteQr(id: QrDetailId) {
         qrDao.deleteQr(id)
     }

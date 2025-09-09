@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
+import com.jvrcoding.qrcraft.qr.presentation.util.toTitleText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -45,11 +47,13 @@ class QRScannerViewModel(
                 state = state.copy(isQRProcessing = true)
 
                 val qrId = UUID.randomUUID().toString()
+                val qrType = result.qrType
                 val qrDetails = QrDetail(
                     id =  qrId,
+                    qrTitleText = QrTypeUi.valueOf(qrType.name).toTitleText(),
                     qrValue = result.qrValue,
                     qrRawValue = result.qrRawValue,
-                    qrType = result.qrType,
+                    qrType = qrType,
                     transactionType = result.transactionType,
                     createdAt = ZonedDateTime.now()
                 )

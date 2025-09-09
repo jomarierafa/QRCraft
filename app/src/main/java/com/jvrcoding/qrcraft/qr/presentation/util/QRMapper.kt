@@ -15,6 +15,7 @@ fun QrDetail.toQrUi(): QrUi {
 
     return QrUi(
         id = id,
+        qrTitleText = qrTitleText,
         qrType = QrTypeUi.valueOf(qrType.name),
         content = qrValue,
         date = formattedDateTime,

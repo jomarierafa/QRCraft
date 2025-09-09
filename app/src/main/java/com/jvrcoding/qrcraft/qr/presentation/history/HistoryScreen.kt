@@ -1,5 +1,7 @@
 package com.jvrcoding.qrcraft.qr.presentation.history
 
+import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +28,10 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,11 +49,13 @@ import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItem
 import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItemMenu
 import com.jvrcoding.qrcraft.qr.presentation.history.model.Tab
+import com.jvrcoding.qrcraft.qr.presentation.models.QrUi
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HistoryScreenRoot(
-    onNavigateToPreviewScren: (QrDetailId) -> Unit,
+    onNavigateToPreviewScreen: (QrDetailId) -> Unit,
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
 
@@ -59,7 +68,7 @@ fun HistoryScreenRoot(
                     context.shareText(action.qrContent)
                 }
                 is HistoryAction.OnItemClick -> {
-                    onNavigateToPreviewScren(action.qrId)
+                    onNavigateToPreviewScreen(action.qrId)
                 }
                 else -> Unit
             }
@@ -84,7 +93,18 @@ fun HistoryScreen(
         },
         containerColor = MaterialTheme.colorScheme.surface
     ) { innerPadding ->
+        val pagerState = rememberPagerState(initialPage = 0, pageCount = { Tab.entries.size })
+        val coroutineScope = rememberCoroutineScope()
         val indicatorPadding = 16.dp
+
+        // TODO()
+//        LaunchedEffect(pagerState) {
+//            snapshotFlow { pagerState.currentPage }
+//                .collect { page ->
+//                    onAction(HistoryAction.ChangeTab(Tab.entries[page]))
+//                }
+//        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,65 +147,50 @@ fun HistoryScreen(
                     )
                 }
             ) {
-                Tab(
-                    modifier = Modifier.padding(start = 16.dp),
-                    selected = state.activeTab == Tab.SCANNED,
-                    onClick = { onAction(HistoryAction.ChangeTab(Tab.SCANNED)) },
-                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceAlt,
-                    text = {
-                        Text(
-                            text = stringResource(R.string.scanned),
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    },
-                )
-                Tab(
-                    modifier = Modifier.padding(end = 16.dp),
-                    selected = state.activeTab == Tab.GENERATED,
-                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceAlt,
-                    onClick = { onAction(HistoryAction.ChangeTab(Tab.GENERATED)) },
-                    text = {
-                        Text(
-                            text = stringResource(R.string.generated),
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                    }
-                )
+                Tab.entries.forEachIndexed { index, tab ->
+                    val paddingValues = if (index == 0)
+                        PaddingValues(start = 16.dp)
+                    else PaddingValues(end = 16.dp)
+                    Tab(
+                        modifier = Modifier.padding(paddingValues),
+                        selected = state.activeTab == tab,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                            onAction(HistoryAction.ChangeTab(tab))
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceAlt,
+                        text = {
+                            Text(
+                                text = tab.title.asString(),
+                                style = MaterialTheme.typography.labelMedium,
+                            )
+                        },
+                    )
+                }
             }
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fadingEdge(fadeHeight = 500f),
-                contentPadding = PaddingValues(
-                    horizontal = 16.dp,
-                    vertical = 8.dp
-                )
-            ) {
-                items(
-                    items = state.qrList,
-                    key = { item -> item.id }
-                ) { item ->
-                    HistoryItem(
-                        iconRes = item.qrType.icon,
-                        iconTint = item.qrType.iconColor,
-                        title = item.qrType.title.asString(),
-                        content = item.content,
-                        dateTime = item.date,
-                        modifier = Modifier
-                            .padding(vertical = 4.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .combinedClickable(
-                                onClick = {
-                                    onAction(HistoryAction.OnItemClick(item.id))
-                                },
-                                onLongClick = {
-                                    onAction(HistoryAction.OnItemLongClick(item))
-                                }
-                            )
-                    )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                when (page) {
+                    0 -> {
+                        Log.d("HistoryScreen", "awit1")
+                        HistoryList(
+                            items = state.qrList,
+                            onAction = onAction
+                        )
+                    }
+                    1 -> {
+                        Log.d("HistoryScreen", "awit2")
+                        HistoryList(
+                            items = state.qrList,
+                            onAction = onAction
+                        )
+                    }
                 }
             }
         }
@@ -204,7 +209,43 @@ fun HistoryScreen(
             )
         }
     }
+}
 
+@Composable
+private fun HistoryList(
+    items: List<QrUi>,
+    onAction: (HistoryAction) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .fadingEdge(500f),
+        contentPadding = PaddingValues(
+            vertical = 8.dp,
+            horizontal = 16.dp
+        )
+    ) {
+        items(
+            items = items,
+            key = { it.id }
+        ) { item ->
+            HistoryItem(
+                iconRes = item.qrType.icon,
+                iconTint = item.qrType.iconColor,
+                title = item.qrTitleText,
+                content = item.content,
+                dateTime = item.date,
+                modifier = Modifier
+                    .animateItem()
+                    .padding(vertical = 4.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .combinedClickable(
+                        onClick = { onAction(HistoryAction.OnItemClick(item.id)) },
+                        onLongClick = { onAction(HistoryAction.OnItemLongClick(item)) }
+                    )
+            )
+        }
+    }
 }
 
 @Preview

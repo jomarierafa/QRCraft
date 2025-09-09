@@ -12,6 +12,9 @@ interface QrDao {
     @Upsert
     suspend fun upsertQr(note: QrEntity)
 
+    @Query("UPDATE qrentity SET qrTitleText = :text WHERE id = :id")
+    suspend fun updateQrTitle(id: String, text: String)
+
     @Query("SELECT * FROM qrentity WHERE id = :id")
     suspend fun getQr(id: String): QrEntity
 

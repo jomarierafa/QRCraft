@@ -8,6 +8,7 @@ import java.time.ZoneId
 fun QrEntity.toQrDetail(): QrDetail {
     return QrDetail(
         id = id,
+        qrTitleText = qrTitleText,
         qrValue = qrValue,
         qrRawValue = qrRawValue,
         qrType = qrType,
@@ -20,6 +21,7 @@ fun QrEntity.toQrDetail(): QrDetail {
 fun QrDetail.toQrEntity(): QrEntity {
     return QrEntity(
         id = id,
+        qrTitleText = qrTitleText,
         qrValue = qrValue,
         qrRawValue = qrRawValue,
         qrType = qrType,
