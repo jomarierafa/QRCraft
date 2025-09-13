@@ -5,6 +5,7 @@ import com.jvrcoding.qrcraft.qr.presentation.models.QrUi
 
 data class HistoryState(
     val activeTab: Tab = Tab.SCANNED,
-    val qrList: List<QrUi> = emptyList(),
+    val scannedQrs: List<QrUi> = emptyList(),
+    val generatedQrs: List<QrUi> = emptyList(),
     val selectedQr: QrUi? = null
 )

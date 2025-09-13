@@ -1,14 +1,12 @@
 package com.jvrcoding.qrcraft.qr.presentation.history
 
 import android.util.Log
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -97,13 +95,12 @@ fun HistoryScreen(
         val coroutineScope = rememberCoroutineScope()
         val indicatorPadding = 16.dp
 
-        // TODO()
-//        LaunchedEffect(pagerState) {
-//            snapshotFlow { pagerState.currentPage }
-//                .collect { page ->
-//                    onAction(HistoryAction.ChangeTab(Tab.entries[page]))
-//                }
-//        }
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.currentPage }
+                .collect { page ->
+                    onAction(HistoryAction.ChangeTab(Tab.entries[page]))
+                }
+        }
 
         Column(
             modifier = Modifier
@@ -178,16 +175,14 @@ fun HistoryScreen(
             ) { page ->
                 when (page) {
                     0 -> {
-                        Log.d("HistoryScreen", "awit1")
                         HistoryList(
-                            items = state.qrList,
+                            items = state.scannedQrs,
                             onAction = onAction
                         )
                     }
                     1 -> {
-                        Log.d("HistoryScreen", "awit2")
                         HistoryList(
-                            items = state.qrList,
+                            items = state.generatedQrs,
                             onAction = onAction
                         )
                     }

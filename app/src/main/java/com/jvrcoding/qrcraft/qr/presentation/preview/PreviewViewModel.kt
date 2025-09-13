@@ -54,9 +54,11 @@ class PreviewViewModel(
                 }
             }
             is PreviewAction.OnTitleTextChange -> {
-                state = state.copy(
-                    title = action.text
-                )
+                if(action.text.length <= 32) {
+                    state = state.copy(
+                        title = action.text
+                    )
+                }
             }
             else -> Unit
         }
