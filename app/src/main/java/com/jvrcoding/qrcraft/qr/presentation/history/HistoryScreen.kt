@@ -1,6 +1,5 @@
 package com.jvrcoding.qrcraft.qr.presentation.history
 
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,6 +47,7 @@ import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItem
 import com.jvrcoding.qrcraft.qr.presentation.history.components.HistoryItemMenu
 import com.jvrcoding.qrcraft.qr.presentation.history.model.Tab
+import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.models.QrUi
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -218,7 +219,8 @@ private fun HistoryList(
         contentPadding = PaddingValues(
             vertical = 8.dp,
             horizontal = 16.dp
-        )
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(
             items = items,
@@ -233,6 +235,7 @@ private fun HistoryList(
                 modifier = Modifier
                     .animateItem()
                     .padding(vertical = 4.dp)
+                    .widthIn(max = 552.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .combinedClickable(
                         onClick = { onAction(HistoryAction.OnItemClick(item.id)) },
@@ -248,7 +251,18 @@ private fun HistoryList(
 private fun HistoryScreenPreview() {
     QRCraftTheme {
         HistoryScreen(
-            state = HistoryState(),
+            state = HistoryState(
+                scannedQrs = listOf(
+                    QrUi(
+                        id = "dwadawd",
+                        qrTitleText = "Text",
+                        content = "text",
+                        qrType = QrTypeUi.TEXT,
+                        date = "qwertry"
+
+                    )
+                )
+            ),
             onAction = {}
         )
     }
