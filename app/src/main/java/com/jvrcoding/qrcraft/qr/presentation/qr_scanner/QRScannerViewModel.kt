@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
+import android.net.Uri
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.getValue
@@ -7,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jvrcoding.qrcraft.R
+import com.jvrcoding.qrcraft.core.presentation.util.UiText
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
@@ -33,12 +36,59 @@ class QRScannerViewModel(
 
     fun onAction(action: QRScannerAction) {
         when(action) {
-            is QRScannerAction.OnProcessImage -> {
-                processImage(action.imageProxy, action.imageAnalysis)
-            }
+            is QRScannerAction.OnProcessImage -> processImage(
+                action.imageProxy,
+                action.imageAnalysis
+            )
+            is QRScannerAction.OnImagePick -> scanQrFromImage(action.uri)
+            QRScannerAction.ToggleTorch -> toggleTorch()
+        }
+    }
 
-            QRScannerAction.ToggleTorch -> {
-                state = state.copy(isTorchOn = !state.isTorchOn)
+    private fun toggleTorch() {
+        state = state.copy(isTorchOn = !state.isTorchOn)
+    }
+
+    private suspend fun processResult(result: QrDetail) {
+        val qrId = UUID.randomUUID().toString()
+        val qrType = result.qrType
+        val qrDetails = QrDetail(
+            id =  qrId,
+            qrTitleText = QrTypeUi.valueOf(qrType.name).toTitleText(),
+            qrValue = result.qrValue,
+            qrRawValue = result.qrRawValue,
+            qrType = qrType,
+            transactionType = result.transactionType,
+            createdAt = ZonedDateTime.now()
+        )
+        qrDataSource.upsertQr(qr = qrDetails)
+
+        delay(500)
+        eventChannel.send(
+            QRScannerEvent.SuccessfulScan(qrId = qrId)
+        )
+
+        delay(500)
+        state = state.copy(isQRProcessing = false)
+    }
+
+    private fun scanQrFromImage(uri: Uri) {
+        viewModelScope.launch {
+            state = state.copy(
+                isTorchOn = false,
+                isQRProcessing = true
+            )
+            val result = qrScanner.scanQrFromUri(uri)
+            if (result != null) {
+               processResult(result)
+            } else {
+                delay(500)
+                state = state.copy(isQRProcessing = false)
+                viewModelScope.launch {
+                    eventChannel.send(
+                        QRScannerEvent.Error(UiText.StringResource(R.string.scan_qr))
+                    )
+                }
             }
         }
     }
@@ -47,32 +97,12 @@ class QRScannerViewModel(
         viewModelScope.launch {
             val result = qrScanner.scan(imageProxy)
             if (result != null && !state.isQRProcessing) {
-                imageAnalysis.clearAnalyzer()
+//                imageAnalysis.clearAnalyzer()
                 state = state.copy(
                     isTorchOn = false,
                     isQRProcessing = true
                 )
-
-                val qrId = UUID.randomUUID().toString()
-                val qrType = result.qrType
-                val qrDetails = QrDetail(
-                    id =  qrId,
-                    qrTitleText = QrTypeUi.valueOf(qrType.name).toTitleText(),
-                    qrValue = result.qrValue,
-                    qrRawValue = result.qrRawValue,
-                    qrType = qrType,
-                    transactionType = result.transactionType,
-                    createdAt = ZonedDateTime.now()
-                )
-                qrDataSource.upsertQr(qr = qrDetails)
-
-                delay(500)
-                eventChannel.send(
-                    QRScannerEvent.SuccessfulScan(qrId = qrId)
-                )
-
-                delay(500)
-                state = state.copy(isQRProcessing = false)
+               processResult(result)
             }
         }
     }

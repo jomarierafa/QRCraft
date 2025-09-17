@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
+import android.net.Uri
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 
@@ -9,4 +10,5 @@ sealed interface QRScannerAction {
         val imageAnalysis: ImageAnalysis
     ): QRScannerAction
     data object ToggleTorch : QRScannerAction
+    data class OnImagePick(val uri: Uri) : QRScannerAction
 }

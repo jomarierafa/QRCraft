@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -18,10 +19,11 @@ fun QrCraftIconButton(
     containerColor: Color,
     icon: ImageVector,
     contentDescription: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    iconSize: Dp = 16.dp
 ) {
     FilledIconButton(
-        modifier = modifier.size(44.dp),
+        modifier = modifier,
         shape = CircleShape,
         colors = IconButtonDefaults.filledIconButtonColors(
             containerColor = containerColor
@@ -32,7 +34,7 @@ fun QrCraftIconButton(
             imageVector = icon,
             contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(iconSize)
         )
     }
 }

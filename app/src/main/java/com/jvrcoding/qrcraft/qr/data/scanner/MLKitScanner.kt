@@ -1,6 +1,8 @@
 package com.jvrcoding.qrcraft.qr.data.scanner
 
+import android.content.Context
 import android.graphics.Rect
+import android.net.Uri
 import android.util.Log
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
@@ -18,7 +20,9 @@ import java.time.ZonedDateTime
 import kotlin.math.min
 
 @ExperimentalCoroutinesApi
-class MLKitScanner() : QrScanner {
+class MLKitScanner(
+    private val context: Context
+) : QrScanner {
 
     val scanner = BarcodeScanning.getClient(
         BarcodeScannerOptions.Builder()
@@ -86,6 +90,35 @@ class MLKitScanner() : QrScanner {
                 }
                 .addOnCompleteListener {
                     imageProxy.close()
+                }
+        }
+    }
+
+    override suspend fun scanQrFromUri(uri: Uri): QrDetail? {
+        val image = InputImage.fromFilePath(context, uri)
+
+        return suspendCancellableCoroutine { cont ->
+            scanner.process(image)
+                .addOnSuccessListener { barcodes ->
+                    barcodes.firstOrNull()?.let {
+                        val qrValue = parseQr(it)
+                        val format = getQrFormat(it.valueType)
+
+                        cont.resume(
+                            QrDetail(
+                                id = "",
+                                qrValue = qrValue,
+                                qrRawValue = it.rawValue ?: "",
+                                qrType = format,
+                                transactionType = Transaction.SCANNED,
+                                createdAt = ZonedDateTime.now()
+                            ),
+                            onCancellation = null
+                        )
+                    } ?: cont.resume(null, onCancellation = null)
+                }
+                .addOnFailureListener {
+                    cont.resume(null, onCancellation = null)
                 }
         }
     }

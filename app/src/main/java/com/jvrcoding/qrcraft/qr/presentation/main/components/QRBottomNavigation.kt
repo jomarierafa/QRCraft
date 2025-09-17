@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jvrcoding.qrcraft.R
+import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QrCraftIconButton
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.AddIcon
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.RefreshIcon
@@ -45,62 +43,38 @@ fun QRBottomNavigation(
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FilledIconButton(
-                modifier = Modifier.size(44.dp),
-                onClick = { onItemClick(BottomNavItem.HISTORY)},
-                shape = CircleShape,
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = if(selectedItemId == BottomNavItem.HISTORY)
-                        MaterialTheme.colorScheme.linkBG
-                    else
-                        Color.Transparent,
-                )
-            ) {
-                Icon(
-                    imageVector = RefreshIcon,
-                    contentDescription = "",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
+
+            QrCraftIconButton(
+                onClick = { onItemClick(BottomNavItem.HISTORY) },
+                containerColor = if(selectedItemId == BottomNavItem.HISTORY)
+                    MaterialTheme.colorScheme.linkBG
+                else Color.Transparent,
+                icon = RefreshIcon,
+                contentDescription = stringResource(R.string.history_tab),
+                modifier = Modifier.size(44.dp)
+            )
 
             Spacer(Modifier.width(70.dp))
 
-            FilledIconButton(
-                modifier = Modifier.size(44.dp),
-                shape = CircleShape,
-                colors = IconButtonDefaults.filledIconButtonColors(
-                    containerColor = if(selectedItemId == BottomNavItem.CREATE_QR)
-                        MaterialTheme.colorScheme.linkBG
-                    else
-                        Color.Transparent,
-                ),
-                onClick = {  onItemClick(BottomNavItem.CREATE_QR) }
-            ) {
-                Icon(
-                    imageVector = AddIcon,
-                    contentDescription = stringResource(R.string.generate_qr),
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-
-        FilledIconButton(
-            modifier = Modifier.size(64.dp),
-            shape = CircleShape,
-            colors =  IconButtonDefaults.filledIconButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            onClick = {  onItemClick(BottomNavItem.SCAN_QR)}
-        ) {
-            Icon(
-                imageVector = ScanIcon,
-                contentDescription = stringResource(R.string.scan_qr),
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(28.dp)
+            QrCraftIconButton(
+                onClick = { onItemClick(BottomNavItem.CREATE_QR) },
+                containerColor =  if(selectedItemId == BottomNavItem.CREATE_QR)
+                    MaterialTheme.colorScheme.linkBG
+                else Color.Transparent,
+                icon = AddIcon,
+                contentDescription = stringResource(R.string.generate_qr),
+                modifier = Modifier.size(44.dp)
             )
         }
+
+        QrCraftIconButton(
+            onClick = { onItemClick(BottomNavItem.SCAN_QR) },
+            containerColor =  MaterialTheme.colorScheme.primary,
+            icon = ScanIcon,
+            contentDescription = stringResource(R.string.scan_qr),
+            iconSize = 28.dp,
+            modifier = Modifier.size(64.dp)
+        )
     }
 
 }

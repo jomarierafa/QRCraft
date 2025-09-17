@@ -1,12 +1,16 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.camera.core.Camera
 import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,6 +84,14 @@ fun QRScannerScreen(
         }
     }
 
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            onAction(QRScannerAction.OnImagePick(uri))
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(
             modifier = Modifier.fillMaxSize(),
@@ -90,29 +102,33 @@ fun QRScannerScreen(
         )
         QRScannerOverlay(state.isQRProcessing)
 
-        QrCraftIconButton(
-            onClick = { onAction(QRScannerAction.ToggleTorch) },
-            containerColor = if(state.isTorchOn)
-                MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.surfaceContainerHigh,
-            icon = if(state.isTorchOn)
-                LightningOffIcon
-            else LightningIcon,
-            contentDescription = "lights on",
-            modifier = Modifier
-                .padding(32.dp)
-        )
+        if (!state.isQRProcessing) {
+            QrCraftIconButton(
+                onClick = { onAction(QRScannerAction.ToggleTorch) },
+                containerColor = if(state.isTorchOn)
+                    MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.surfaceContainerHigh,
+                icon = if(state.isTorchOn)
+                    LightningOffIcon
+                else LightningIcon,
+                contentDescription = "lights on",
+                modifier = Modifier
+                    .padding(vertical = 64.dp, horizontal = 32.dp)
+                    .size(44.dp)
+            )
 
-        QrCraftIconButton(
-            onClick = {},
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            icon = ImageIcon,
-            contentDescription = "lights on",
-            modifier = Modifier
-                .padding(32.dp)
-                .align(Alignment.TopEnd)
-        )
+            QrCraftIconButton(
+                onClick = { galleryLauncher.launch("image/*") },
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                icon = ImageIcon,
+                contentDescription = "lights on",
+                modifier = Modifier
+                    .padding(vertical = 64.dp, horizontal = 32.dp)
+                    .align(Alignment.TopEnd)
+                    .size(44.dp)
 
+            )
+        }
 
 //        if (state.hasCameraPermission) {
 //            CameraPreview(
