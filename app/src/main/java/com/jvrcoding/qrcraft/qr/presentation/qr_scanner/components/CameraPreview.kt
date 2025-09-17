@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components
 
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -16,6 +17,7 @@ import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRScannerAction
 fun CameraPreview(
     modifier: Modifier = Modifier,
     onAction: (QRScannerAction) -> Unit,
+    onCameraReady: (Camera) -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -44,12 +46,13 @@ fun CameraPreview(
 
 
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                val camera = cameraProvider.bindToLifecycle(
                     lifecycleOwner,
                     CameraSelector.DEFAULT_BACK_CAMERA,
                     preview,
                     imageAnalysis
                 )
+                onCameraReady(camera)
             }, ContextCompat.getMainExecutor(context))
 
             previewView

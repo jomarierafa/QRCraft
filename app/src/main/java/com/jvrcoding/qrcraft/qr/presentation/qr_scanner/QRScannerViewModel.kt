@@ -36,6 +36,10 @@ class QRScannerViewModel(
             is QRScannerAction.OnProcessImage -> {
                 processImage(action.imageProxy, action.imageAnalysis)
             }
+
+            QRScannerAction.ToggleTorch -> {
+                state = state.copy(isTorchOn = !state.isTorchOn)
+            }
         }
     }
 
@@ -44,7 +48,10 @@ class QRScannerViewModel(
             val result = qrScanner.scan(imageProxy)
             if (result != null && !state.isQRProcessing) {
                 imageAnalysis.clearAnalyzer()
-                state = state.copy(isQRProcessing = true)
+                state = state.copy(
+                    isTorchOn = false,
+                    isQRProcessing = true
+                )
 
                 val qrId = UUID.randomUUID().toString()
                 val qrType = result.qrType

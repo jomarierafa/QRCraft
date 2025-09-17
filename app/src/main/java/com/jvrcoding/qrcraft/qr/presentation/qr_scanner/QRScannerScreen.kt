@@ -2,13 +2,30 @@ package com.jvrcoding.qrcraft.qr.presentation.qr_scanner
 
 import android.widget.Toast
 import androidx.annotation.OptIn
+import androidx.camera.core.Camera
 import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.jvrcoding.qrcraft.core.presentation.designsystem.components.QrCraftIconButton
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.ImageIcon
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LightningIcon
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.LightningOffIcon
+import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.QRCraftTheme
 import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
+import com.jvrcoding.qrcraft.core.presentation.util.isAppInForeground
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.CameraPreview
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components.QRScannerOverlay
@@ -52,12 +69,49 @@ fun QRScannerScreen(
     state: QRScannerState,
     onAction: (QRScannerAction) -> Unit
 ) {
+    var camera by remember { mutableStateOf<Camera?>(null) }
+
+    val isAppInForeground by isAppInForeground()
+    LaunchedEffect(state.isTorchOn, isAppInForeground) {
+        if(state.isTorchOn && isAppInForeground) {
+            camera?.cameraControl?.enableTorch(true)
+        } else {
+            camera?.cameraControl?.enableTorch(false)
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(
             modifier = Modifier.fillMaxSize(),
-            onAction = onAction
+            onAction = onAction,
+            onCameraReady = { cam ->
+                camera = cam
+            }
         )
         QRScannerOverlay(state.isQRProcessing)
+
+        QrCraftIconButton(
+            onClick = { onAction(QRScannerAction.ToggleTorch) },
+            containerColor = if(state.isTorchOn)
+                MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.surfaceContainerHigh,
+            icon = if(state.isTorchOn)
+                LightningOffIcon
+            else LightningIcon,
+            contentDescription = "lights on",
+            modifier = Modifier
+                .padding(32.dp)
+        )
+
+        QrCraftIconButton(
+            onClick = {},
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            icon = ImageIcon,
+            contentDescription = "lights on",
+            modifier = Modifier
+                .padding(32.dp)
+                .align(Alignment.TopEnd)
+        )
 
 
 //        if (state.hasCameraPermission) {
@@ -86,4 +140,15 @@ fun QRScannerScreen(
 
     }
 
+}
+
+@Preview
+@Composable
+private fun QRScannerScreenPreview() {
+    QRCraftTheme {
+        QRScannerScreen(
+            state = QRScannerState(),
+            onAction = {}
+        )
+    }
 }

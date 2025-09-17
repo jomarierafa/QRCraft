@@ -29,3 +29,15 @@ val AddIcon: ImageVector
 val TrashIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_trash)
+
+val LightningIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_lightning)
+
+val LightningOffIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_lightning_off)
+
+val ImageIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_image)

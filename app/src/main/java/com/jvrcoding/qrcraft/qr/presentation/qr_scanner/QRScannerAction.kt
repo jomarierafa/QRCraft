@@ -8,4 +8,5 @@ sealed interface QRScannerAction {
         val imageProxy: ImageProxy,
         val imageAnalysis: ImageAnalysis
     ): QRScannerAction
+    data object ToggleTorch : QRScannerAction
 }
