@@ -35,4 +35,5 @@
     <string name="scanned">Scanned</string>
     <string name="delete">Delete</string>
     <string name="history_tab">History tab</string>
+    <string name="no_qr_codes_found">No QR-codes found</string>
 </resources>

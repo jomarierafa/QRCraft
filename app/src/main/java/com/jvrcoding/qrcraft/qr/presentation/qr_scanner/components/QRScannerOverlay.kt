@@ -2,10 +2,8 @@ package com.jvrcoding.qrcraft.qr.presentation.qr_scanner.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +29,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.overlay
 
 @Composable
 fun QRScannerOverlay(
-    isLoading: Boolean
+    showCutout: Boolean
 ) {
     val cornerPaintColor = MaterialTheme.colorScheme.primary
     val bgColor = MaterialTheme.colorScheme.overlay
@@ -53,7 +51,7 @@ fun QRScannerOverlay(
             // Screen background
             drawRect(color = bgColor)
 
-            if(!isLoading) {
+            if(showCutout) {
                 // Rounded transparent cutout
                 val cornerRadiusPx = 24.dp.toPx()
                 drawRoundRect(
@@ -143,7 +141,7 @@ fun QRScannerOverlay(
 
         }
 
-        if(!isLoading) {
+        if(showCutout) {
             Text(
                 text = stringResource(R.string.point_your_camera_at_a_qr_code),
                 style = MaterialTheme.typography.titleSmall.copy(
@@ -155,25 +153,6 @@ fun QRScannerOverlay(
                     .padding(top = cutoutTopY - 48.dp)
                     .padding(horizontal = 32.dp)
             )
-        } else {
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator(
-                    strokeWidth = 1.5.dp,
-                    color = MaterialTheme.colorScheme.onOverlay
-                )
-
-                Text(
-                    text = stringResource(R.string.loading),
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onOverlay
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                )
-            }
         }
     }
 }
@@ -183,7 +162,7 @@ fun QRScannerOverlay(
 private fun QRScannerOverlayPreview() {
     QRCraftTheme {
         QRScannerOverlay(
-            isLoading = true
+            showCutout = true
         )
     }
 }

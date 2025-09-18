@@ -41,3 +41,7 @@ val LightningOffIcon: ImageVector
 val ImageIcon: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_image)
+
+val ImageAlert: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_alert_triangle)

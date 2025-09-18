@@ -8,13 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.qrcraft.R
-import com.jvrcoding.qrcraft.core.presentation.util.UiText
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
 import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.util.toTitleText
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -34,6 +33,8 @@ class QRScannerViewModel(
     val events = eventChannel.receiveAsFlow()
 
 
+    private var dismissJob: Job? = null
+
     fun onAction(action: QRScannerAction) {
         when(action) {
             is QRScannerAction.OnProcessImage -> processImage(
@@ -42,7 +43,12 @@ class QRScannerViewModel(
             )
             is QRScannerAction.OnImagePick -> scanQrFromImage(action.uri)
             QRScannerAction.ToggleTorch -> toggleTorch()
+            QRScannerAction.OnDismissErrorDialog -> onDismissErrorDialog()
         }
+    }
+
+    private fun onDismissErrorDialog() {
+        state = state.copy(showErrorDialog = false)
     }
 
     private fun toggleTorch() {
@@ -83,12 +89,11 @@ class QRScannerViewModel(
                processResult(result)
             } else {
                 delay(500)
-                state = state.copy(isQRProcessing = false)
-                viewModelScope.launch {
-                    eventChannel.send(
-                        QRScannerEvent.Error(UiText.StringResource(R.string.scan_qr))
-                    )
-                }
+                state = state.copy(
+                    isQRProcessing = false,
+                    showErrorDialog = true
+                )
+                startDismissTimer()
             }
         }
     }
@@ -105,6 +110,19 @@ class QRScannerViewModel(
                processResult(result)
             }
         }
+    }
+
+    private fun startDismissTimer() {
+        cancelHideJob()
+        dismissJob = viewModelScope.launch {
+            delay(3000)
+            state = state.copy(showErrorDialog = false)
+        }
+    }
+
+    private fun cancelHideJob() {
+        dismissJob?.cancel()
+        dismissJob = null
     }
 
 }
