@@ -36,6 +36,16 @@ class RoomQrDataSource(
         )
     }
 
+    override suspend fun updateQrFavoriteStatus(
+        id: QrDetailId,
+        isFavorite: Boolean
+    ) {
+        qrDao.updateFavoriteStatus(
+            id = id,
+            isFavorite = isFavorite
+        )
+    }
+
     override suspend fun deleteQr(id: QrDetailId) {
         qrDao.deleteQr(id)
     }

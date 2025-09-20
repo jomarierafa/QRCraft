@@ -12,11 +12,9 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.jvrcoding.qrcraft.qr.domain.qr.QrType
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
-import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
-import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
+import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.time.ZonedDateTime
 import kotlin.math.min
 
 @ExperimentalCoroutinesApi
@@ -31,7 +29,7 @@ class MLKitScanner(
     )
 
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
-    override suspend fun scan(imageProxy: ImageProxy): QrDetail? {
+    override suspend fun scan(imageProxy: ImageProxy): ScanResult? {
 
         val mediaImage = imageProxy.image ?: run {
             imageProxy.close()
@@ -71,15 +69,12 @@ class MLKitScanner(
                     }?.let {
                         val qrValue = parseQr(it)
                         val format = getQrFormat(it.valueType)
-                        Log.d("QrScannerRepository", "scan: $format")
+                        Log.d("QrScannerRepository", "scan: ${it.rawValue}")
                         cont.resume(
-                            QrDetail(
-                                id = "",
+                            ScanResult(
                                 qrValue = qrValue,
                                 qrRawValue = it.rawValue ?: "",
-                                qrType = format,
-                                transactionType = Transaction.SCANNED,
-                                createdAt = ZonedDateTime.now()
+                                qrType = format
                             ),
                             null
                         )
@@ -94,7 +89,7 @@ class MLKitScanner(
         }
     }
 
-    override suspend fun scanQrFromUri(uri: Uri): QrDetail? {
+    override suspend fun scanQrFromUri(uri: Uri): ScanResult? {
         val image = InputImage.fromFilePath(context, uri)
 
         return suspendCancellableCoroutine { cont ->
@@ -105,13 +100,10 @@ class MLKitScanner(
                         val format = getQrFormat(it.valueType)
 
                         cont.resume(
-                            QrDetail(
-                                id = "",
+                            ScanResult(
                                 qrValue = qrValue,
                                 qrRawValue = it.rawValue ?: "",
                                 qrType = format,
-                                transactionType = Transaction.SCANNED,
-                                createdAt = ZonedDateTime.now()
                             ),
                             onCancellation = null
                         )

@@ -13,6 +13,7 @@ fun QrEntity.toQrDetail(): QrDetail {
         qrRawValue = qrRawValue,
         qrType = qrType,
         transactionType = transactionType,
+        isFavorite = isFavorite,
         createdAt = Instant.parse(createdAt)
             .atZone(ZoneId.of("UTC"))
     )
@@ -25,6 +26,7 @@ fun QrDetail.toQrEntity(): QrEntity {
         qrValue = qrValue,
         qrRawValue = qrRawValue,
         qrType = qrType,
+        isFavorite = isFavorite,
         transactionType = transactionType,
         createdAt = createdAt.toInstant().toString()
     )

@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.core.presentation.designsystem.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,6 +24,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.onOverlay
 fun QRCraftToolbar(
     title: String,
     showBackButton:  Boolean,
+    actionIcon:@Composable RowScope.() -> Unit = {},
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     textColor: Color = MaterialTheme.colorScheme.onOverlay,
@@ -49,6 +51,7 @@ fun QRCraftToolbar(
                 }
             }
         },
+        actions = actionIcon
     )
 }
 

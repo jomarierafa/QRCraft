@@ -1,8 +1,10 @@
 package com.jvrcoding.qrcraft.qr.di
 
+import com.jvrcoding.qrcraft.qr.data.image.ImageRepoImpl
 import com.jvrcoding.qrcraft.qr.data.qr.RoomQrDataSource
 import com.jvrcoding.qrcraft.qr.data.qr_generator.ZxingQrCodeGenerator
 import com.jvrcoding.qrcraft.qr.data.scanner.MLKitScanner
+import com.jvrcoding.qrcraft.qr.domain.image.ImageRepository
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr_generator.QrCodeGenerator
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
@@ -29,5 +31,5 @@ val qrModule = module {
     singleOf(::MLKitScanner).bind<QrScanner>()
     singleOf(::ZxingQrCodeGenerator).bind<QrCodeGenerator>()
     singleOf(::RoomQrDataSource).bind<LocalQrDataSource>()
-
+    singleOf(::ImageRepoImpl).bind<ImageRepository>()
 }

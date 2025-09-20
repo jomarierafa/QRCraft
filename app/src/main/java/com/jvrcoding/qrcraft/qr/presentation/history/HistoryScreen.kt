@@ -232,6 +232,13 @@ private fun HistoryList(
                 title = item.qrTitleText,
                 content = item.content,
                 dateTime = item.date,
+                isFavorite = item.isFavorite,
+                onFavoriteClick = {
+                    onAction(HistoryAction.OnFavoriteClick(
+                        qrId = item.id,
+                        isFavorite = item.isFavorite
+                    ))
+                                  },
                 modifier = Modifier
                     .animateItem()
                     .padding(vertical = 4.dp)
@@ -258,6 +265,7 @@ private fun HistoryScreenPreview() {
                         qrTitleText = "Text",
                         content = "text",
                         qrType = QrTypeUi.TEXT,
+                        isFavorite = false,
                         date = "qwertry"
 
                     )

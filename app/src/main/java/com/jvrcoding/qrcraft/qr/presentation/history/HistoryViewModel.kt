@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
+import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
 import com.jvrcoding.qrcraft.qr.presentation.history.model.Tab
 import com.jvrcoding.qrcraft.qr.presentation.models.QrUi
@@ -21,6 +22,9 @@ class HistoryViewModel(
 
     var state by mutableStateOf(HistoryState())
         private set
+
+    private val qrComparator = compareByDescending<QrUi> { it.isFavorite }
+        .thenByDescending { it.date }
 
     private val filteredQrs = qrDataSource
         .getQrList()
@@ -38,8 +42,8 @@ class HistoryViewModel(
             }
 
             state = state.copy(
-                scannedQrs = scannedQrs,
-                generatedQrs = generatedQrs
+                scannedQrs = scannedQrs.sortedWith(qrComparator),
+                generatedQrs = generatedQrs.sortedWith(qrComparator)
             )
         }
 
@@ -56,9 +60,19 @@ class HistoryViewModel(
             is HistoryAction.OnItemLongClick -> onItemLongClick(action.qr)
             HistoryAction.OnDismissItemMenu -> onDismissItemMenu()
             is HistoryAction.OnDeleteQrClick -> deleteQr(action.qrId)
+            is HistoryAction.OnFavoriteClick -> onFavoriteToggle(action.qrId, action.isFavorite)
             else -> Unit
         }
 
+    }
+
+    private fun onFavoriteToggle(qrId: QrDetailId, isFavorite: Boolean) {
+        viewModelScope.launch {
+            qrDataSource.updateQrFavoriteStatus(
+                id = qrId,
+                isFavorite = !isFavorite
+            )
+        }
     }
 
     private fun changeTab(tab: Tab) {

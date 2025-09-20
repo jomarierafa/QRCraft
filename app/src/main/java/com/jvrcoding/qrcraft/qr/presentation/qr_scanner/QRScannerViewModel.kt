@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.qrcraft.qr.domain.qr.LocalQrDataSource
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetail
+import com.jvrcoding.qrcraft.qr.domain.qr.Transaction
 import com.jvrcoding.qrcraft.qr.domain.scanner.QrScanner
+import com.jvrcoding.qrcraft.qr.domain.scanner.ScanResult
 import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.util.toTitleText
 import kotlinx.coroutines.Job
@@ -55,7 +57,7 @@ class QRScannerViewModel(
         state = state.copy(isTorchOn = !state.isTorchOn)
     }
 
-    private suspend fun processResult(result: QrDetail) {
+    private suspend fun processResult(result: ScanResult) {
         val qrId = UUID.randomUUID().toString()
         val qrType = result.qrType
         val qrDetails = QrDetail(
@@ -64,7 +66,8 @@ class QRScannerViewModel(
             qrValue = result.qrValue,
             qrRawValue = result.qrRawValue,
             qrType = qrType,
-            transactionType = result.transactionType,
+            isFavorite = false,
+            transactionType = Transaction.SCANNED,
             createdAt = ZonedDateTime.now()
         )
         qrDataSource.upsertQr(qr = qrDetails)

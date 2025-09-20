@@ -8,6 +8,7 @@ data class QrDetail(
     val qrValue: String,
     val qrRawValue: String,
     val qrType: QrType,
+    val isFavorite: Boolean,
     val transactionType: Transaction,
     val createdAt: ZonedDateTime,
 )

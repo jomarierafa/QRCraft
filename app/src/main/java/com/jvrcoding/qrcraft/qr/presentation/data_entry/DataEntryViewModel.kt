@@ -110,6 +110,7 @@ class DataEntryViewModel(
                 qrValue = displayText(),
                 qrRawValue = rawValue(),
                 qrType = QrType.valueOf(qrType.name),
+                isFavorite = false,
                 transactionType = Transaction.GENERATED,
                 createdAt = ZonedDateTime.now()
             )
@@ -123,7 +124,7 @@ class DataEntryViewModel(
             QrTypeUi.TEXT -> state.text.text.toString()
             QrTypeUi.LINK -> state.link.text.toString()
             QrTypeUi.GEOLOCATION -> "geo:${state.latitude.text},${state.longitude.text}"
-            QrTypeUi.WIFI -> "WIFI:S${state.wifiSsid.text};T:${state.wifiEncryption.text};P:${state.wifiPassword.text};;"
+            QrTypeUi.WIFI -> "WIFI:S:${state.wifiSsid.text};T:${state.wifiEncryption.text};P:${state.wifiPassword.text};;"
             QrTypeUi.CONTACT -> """
                             BEGIN:VCARD
                             VERSION:3.0

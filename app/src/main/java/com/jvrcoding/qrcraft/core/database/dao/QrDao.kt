@@ -15,6 +15,9 @@ interface QrDao {
     @Query("UPDATE qrentity SET qrTitleText = :text WHERE id = :id")
     suspend fun updateQrTitle(id: String, text: String)
 
+    @Query("UPDATE qrentity SET isFavorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavoriteStatus(id: String, isFavorite: Boolean)
+
     @Query("SELECT * FROM qrentity WHERE id = :id")
     suspend fun getQr(id: String): QrEntity
 

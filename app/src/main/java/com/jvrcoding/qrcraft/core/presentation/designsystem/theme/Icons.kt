@@ -45,3 +45,15 @@ val ImageIcon: ImageVector
 val ImageAlert: ImageVector
     @Composable
     get() = ImageVector.vectorResource(id = R.drawable.ic_alert_triangle)
+
+val SaveIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_save)
+
+val StarIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_star)
+
+val StarFilledIcon: ImageVector
+    @Composable
+    get() = ImageVector.vectorResource(id = R.drawable.ic_star_filled)

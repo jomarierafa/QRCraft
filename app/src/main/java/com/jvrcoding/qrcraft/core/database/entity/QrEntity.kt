@@ -12,6 +12,7 @@ data class QrEntity(
     val qrRawValue: String,
     val qrTitleText: String,
     val qrType: QrType,
+    val isFavorite: Boolean,
     val transactionType: Transaction,
     val createdAt: String,
     @PrimaryKey(autoGenerate = false)

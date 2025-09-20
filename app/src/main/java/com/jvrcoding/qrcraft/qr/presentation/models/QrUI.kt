@@ -6,5 +6,6 @@ data class QrUi(
     val qrTitleText: String,
     val qrType: QrTypeUi,
     val content: String,
+    val isFavorite: Boolean,
     val date: String,
 )

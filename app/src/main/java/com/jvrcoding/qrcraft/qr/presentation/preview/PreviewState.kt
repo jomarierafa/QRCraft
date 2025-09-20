@@ -8,5 +8,6 @@ data class PreviewState(
     val qrImage: Bitmap? = null,
     val qrType: QrTypeUi = QrTypeUi.TEXT,
     val title: String = "",
-    val contentValue: String = ""
+    val contentValue: String = "",
+    val isFavorite: Boolean = false
 )

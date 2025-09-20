@@ -18,6 +18,7 @@ fun QrDetail.toQrUi(): QrUi {
         qrTitleText = qrTitleText,
         qrType = QrTypeUi.valueOf(qrType.name),
         content = qrValue,
+        isFavorite = isFavorite,
         date = formattedDateTime,
     )
 
