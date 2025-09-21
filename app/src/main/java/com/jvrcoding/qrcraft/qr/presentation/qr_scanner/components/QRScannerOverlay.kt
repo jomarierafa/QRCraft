@@ -150,7 +150,7 @@ fun QRScannerOverlay(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = cutoutTopY - 48.dp)
+                    .padding(top = (cutoutTopY - 48.dp).coerceAtLeast(0.dp))
                     .padding(horizontal = 32.dp)
             )
         }
