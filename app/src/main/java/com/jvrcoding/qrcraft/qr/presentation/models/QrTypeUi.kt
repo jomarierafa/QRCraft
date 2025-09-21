@@ -1,5 +1,6 @@
 package com.jvrcoding.qrcraft.qr.presentation.models
 
+import androidx.annotation.Keep
 import androidx.compose.ui.graphics.Color
 import com.jvrcoding.qrcraft.R
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Contact
@@ -10,6 +11,7 @@ import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Text
 import com.jvrcoding.qrcraft.core.presentation.designsystem.theme.Wifi
 import com.jvrcoding.qrcraft.core.presentation.util.UiText
 
+@Keep
 enum class QrTypeUi(
     val title: UiText,
     val icon: Int,
