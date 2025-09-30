@@ -178,13 +178,15 @@ fun HistoryScreen(
                     0 -> {
                         HistoryList(
                             items = state.scannedQrs,
-                            onAction = onAction
+                            onAction = onAction,
+                            emptyMessage = stringResource(R.string.no_scanned_qr_codes)
                         )
                     }
                     1 -> {
                         HistoryList(
                             items = state.generatedQrs,
-                            onAction = onAction
+                            onAction = onAction,
+                            emptyMessage = stringResource(R.string.no_generated_qr_codes)
                         )
                     }
                 }
@@ -210,45 +212,61 @@ fun HistoryScreen(
 @Composable
 private fun HistoryList(
     items: List<QrUi>,
-    onAction: (HistoryAction) -> Unit
+    onAction: (HistoryAction) -> Unit,
+    emptyMessage: String
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .fadingEdge(500f),
-        contentPadding = PaddingValues(
-            vertical = 8.dp,
-            horizontal = 16.dp
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        items(
-            items = items,
-            key = { it.id }
-        ) { item ->
-            HistoryItem(
-                iconRes = item.qrType.icon,
-                iconTint = item.qrType.iconColor,
-                title = item.qrTitleText,
-                content = item.content,
-                dateTime = item.date,
-                isFavorite = item.isFavorite,
-                onFavoriteClick = {
-                    onAction(HistoryAction.OnFavoriteClick(
-                        qrId = item.id,
-                        isFavorite = item.isFavorite
-                    ))
-                                  },
-                modifier = Modifier
-                    .animateItem()
-                    .padding(vertical = 4.dp)
-                    .widthIn(max = 552.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .combinedClickable(
-                        onClick = { onAction(HistoryAction.OnItemClick(item.id)) },
-                        onLongClick = { onAction(HistoryAction.OnItemLongClick(item)) }
-                    )
+    if (items.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = emptyMessage,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceAlt
             )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .fadingEdge(500f),
+            contentPadding = PaddingValues(
+                vertical = 8.dp,
+                horizontal = 16.dp
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(
+                items = items,
+                key = { it.id }
+            ) { item ->
+                HistoryItem(
+                    iconRes = item.qrType.icon,
+                    iconTint = item.qrType.iconColor,
+                    title = item.qrTitleText,
+                    content = item.content,
+                    dateTime = item.date,
+                    isFavorite = item.isFavorite,
+                    onFavoriteClick = {
+                        onAction(HistoryAction.OnFavoriteClick(
+                            qrId = item.id,
+                            isFavorite = item.isFavorite
+                        ))
+                                      },
+                    modifier = Modifier
+                        .animateItem()
+                        .padding(vertical = 4.dp)
+                        .widthIn(max = 552.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .combinedClickable(
+                            onClick = { onAction(HistoryAction.OnItemClick(item.id)) },
+                            onLongClick = { onAction(HistoryAction.OnItemLongClick(item)) }
+                        )
+                )
+            }
         }
     }
 }

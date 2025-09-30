@@ -38,4 +38,6 @@
     <string name="no_qr_codes_found">No QR-codes found</string>
     <string name="save">Save</string>
     <string name="image_saved">Image saved to Downloads</string>
+    <string name="no_scanned_qr_codes">No scanned QR codes</string>
+    <string name="no_generated_qr_codes">No generated QR codes</string>
 </resources>
