@@ -4,16 +4,15 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,13 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,6 +45,7 @@ import com.jvrcoding.qrcraft.core.presentation.util.ObserveAsEvents
 import com.jvrcoding.qrcraft.qr.domain.qr.QrDetailId
 import com.jvrcoding.qrcraft.qr.presentation.create_qr.CreateQrScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.history.HistoryScreenRoot
+import com.jvrcoding.qrcraft.qr.presentation.main.model.BottomNavItem
 import com.jvrcoding.qrcraft.qr.presentation.models.QrTypeUi
 import com.jvrcoding.qrcraft.qr.presentation.qr_scanner.QRSCannerScreenRoot
 import com.jvrcoding.qrcraft.qr.presentation.util.hasCameraPermission
@@ -62,16 +62,17 @@ fun MainScreenRoot(
     val bottomNavController = rememberNavController()
 
     ObserveAsEvents(flow = viewModel.events) { event ->
-        when(event) {
-            MainEvent.NavigateToScanQr -> {
-                bottomNavController.navigate(NavigationRoute.QRScanner)
+        val route = when (event) {
+            MainEvent.NavigateToScanQr -> NavigationRoute.QRScanner
+            MainEvent.NavigateToHistory -> NavigationRoute.History
+            MainEvent.NavigateToCreateQr -> NavigationRoute.CreateQR
+        }
+        bottomNavController.navigate(route) {
+            popUpTo(bottomNavController.graph.findStartDestination().id) {
+                saveState = true
             }
-            MainEvent.NavigateToHistory -> {
-                bottomNavController.navigate(NavigationRoute.History)
-            }
-            MainEvent.NavigateToCreateQr -> {
-                bottomNavController.navigate(NavigationRoute.CreateQR)
-            }
+            launchSingleTop = true
+            restoreState = true
         }
     }
     MainScreen(
@@ -154,12 +155,7 @@ fun MainScreen(
             )
         },
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
+            BottomAppBar(containerColor = Color.Transparent) {
                 QRBottomNavigation(
                     selectedItemId = state.selectedScreenItem,
                     onItemClick = { item ->
@@ -183,6 +179,9 @@ fun MainScreen(
                 }
             }
             composable<NavigationRoute.CreateQR> {
+                BackHandler {
+                    onAction(MainAction.OnBottomNavigationItemClick(BottomNavItem.SCAN_QR))
+                }
                 CreateQrScreenRoot(
                     onItemClick = { qrType ->
                         onAction(MainAction.OnCreateQrItemClick(qrType))
@@ -190,6 +189,9 @@ fun MainScreen(
                 )
             }
             composable<NavigationRoute.History> {
+                BackHandler {
+                    onAction(MainAction.OnBottomNavigationItemClick(BottomNavItem.SCAN_QR))
+                }
                 HistoryScreenRoot(
                     onNavigateToPreviewScreen = {
                         onAction(MainAction.OnNavigateToPreviewScreen(it))
